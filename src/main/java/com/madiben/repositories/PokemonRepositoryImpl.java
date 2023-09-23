@@ -25,31 +25,29 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     public Optional<List<Pokemon>> findAll() throws SQLException {
         String sql = "SELECT * FROM pokemon";
         database.open();
-        ResultSet res = database.select(sql).orElseThrow(() -> new SQLException("Error al obtener las personas."));
+        ResultSet res = database.select(sql).orElseThrow(() -> new SQLException("Error al obtener a los pokemons."));
         var pokemons = new ArrayList<Pokemon>();
-        return Optional.empty();
         while (res.next()) {
-
-            var pokemon = Pokemon.builder()
-                    .id(res.getInt("id"))
-                    .num(res.getString("num"))
-                    .img(res.getString("img"))
-                    .type(res.getType("type"))
-                    .height(res.getString("height"))
-                    .weight(res.getString("weight"))
-                    .candy(res.getString("candy"))
-                    .candyCount(res.getInt("candyCount"))
-                    .egg(res.getString("egg"))
-                    .spawnChance(res.getDouble("spawnChance"))
-                    .avgSpawns(res.getDouble("avgSpawns"))
-                    .spawnTime(res.getString("spawntime"))
-                    .multipliers()
-                    .weaknesses()
-                    .nextEvolution()
-                    .prevEvolution()
-
-                    .build();
-            pokemons.add(pokemon);
+//            var pokemon = Pokemon.builder()
+//                    .id(res.getInt("id"))
+//                    .num(res.getString("num"))
+//                    .img(res.getString("img"))
+//                    //.type(res.getType("type")) //TODO: DO
+//                    .height(res.getString("height"))
+//                    .weight(res.getString("weight"))
+//                    .candy(res.getString("candy"))
+//                    .candyCount(res.getInt("candyCount"))
+//                    .egg(res.getString("egg"))
+//                    .spawnChance(res.getDouble("spawnChance"))
+//                    .avgSpawns(res.getDouble("avgSpawns"))
+//                    .spawnTime(res.getString("spawntime"))
+//                    //.multipliers() //TODO: DO
+//                    //.weaknesses() //TODO: DO
+//                    //.nextEvolution() //TODO: DO
+//                    //.prevEvolution() //TODO: DO
+//
+//                    .build();
+//            pokemons.add(pokemon);
         }
         database.close();
         return Optional.of(pokemons);
@@ -72,28 +70,27 @@ public class PokemonRepositoryImpl implements PokemonRepository {
 
         if (res.next()) {
 
-            var pokemon = Pokemon.builder()
-                    .id(res.getInt("id"))
-                    .num(res.getString("num"))
-                    .img(res.getString("img"))
-                    .type(res.getType("type"))
-                    .height(res.getString("height"))
-                    .weight(res.getString("weight"))
-                    .candy(res.getString("candy"))
-                    .candyCount(res.getInt("candyCount"))
-                    .egg(res.getString("egg"))
-                    .spawnChance(res.getDouble("spawnChance"))
-                    .avgSpawns(res.getDouble("avgSpawns"))
-                    .spawnTime(res.getString("spawntime"))
-                    .multipliers()
-                    .weaknesses()
-                    .nextEvolution()
-                    .prevEvolution()
-
-                    .build();
-            pokemons.add(pokemon);
+//            var pokemon = Pokemon.builder()
+//                    .id(res.getInt("id"))
+//                    .num(res.getString("num"))
+//                    .img(res.getString("img"))
+//                    //.type(res.getType("type")) //TODO: DO
+//                    .height(res.getString("height"))
+//                    .weight(res.getString("weight"))
+//                    .candy(res.getString("candy"))
+//                    .candyCount(res.getInt("candyCount"))
+//                    .egg(res.getString("egg"))
+//                    .spawnChance(res.getDouble("spawnChance"))
+//                    .avgSpawns(res.getDouble("avgSpawns"))
+//                    .spawnTime(res.getString("spawntime"))
+//                    //.multipliers() //TODO: DO
+//                    //.weaknesses() //TODO: DO
+//                    //.nextEvolution() //TODO: DO
+//                    //.prevEvolution() //TODO: DO
+//                    .build();
+//            pokemons.add(pokemon);
             database.close();
-            return Optional.of(pokemon);
+//            return Optional.of(pokemon);
         }
         database.close();
         return Optional.empty();
@@ -108,9 +105,15 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      */
     @Override
     public Optional<Pokemon> save(Pokemon entity) throws SQLException {
-        var sql = "INSERT INTO pokemon (id, num, name, img, type,height,weight,candy,candyCount,egg,spawnChance,avgSpawns,spawnTime,multipliers,weaknesses,nextEvolution,prevEvolution) VALUES (?, ?, ?, ?)";
+        var sql = "INSERT INTO pokemon (id,num,name,img,type,height,weight,candy,candyCount,egg,spawnChance," +
+        "avgSpawns,spawnTime,multipliers,weaknesses,nextEvolution,prevEvolution) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         database.open();
-        var res= database.insert(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType(),entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution()).orElseThrow(() -> new SQLException("Error al insertar el pokemon"));
+        var res= database.insert(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType()
+                ,entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),
+                entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),
+                entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution())
+                .orElseThrow(() -> new SQLException("Error al insertar el pokemon"));
         database.close();
         if(res.next()){
             return Optional.of(entity);
@@ -133,9 +136,14 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      */
     @Override
     public Optional<Pokemon> update(Integer integer, Pokemon entity) throws SQLException {
-        var sql="UPDATE pokemon SET id=?, num=?, name=?, img=?, type=?,height=?,weight=?,candy=?,candyCount=?,egg=?,spawnChance=?,avgSpawns=?,spawnTime=?,multipliers=?,weaknesses=?,nextEvolution=?,prevEvolution=? WHERE id=?";
+        var sql="UPDATE pokemon SET id=?, num=?, name=?, img=?, type=?,height=?,weight=?,candy=?,candyCount=?,egg=?," +
+                "spawnChance=?,avgSpawns=?,spawnTime=?,multipliers=?,weaknesses=?,nextEvolution=?,prevEvolution=? " +
+                "WHERE id=?";
         database.open();
-        var res= database.update(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType(),entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution(),integer);
+        var res= database.update(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType(),
+                entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),
+                entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),
+                entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution(),integer);
         if(res >0){
             database.close();
             return Optional.of(entity);
@@ -183,34 +191,32 @@ public class PokemonRepositoryImpl implements PokemonRepository {
         var pokemons = new ArrayList<>();
         var res= database.select(sql,name).orElseThrow(() -> new SQLException("Error al obtener el pokemon"));
         if(res.next()){
-            var pokemon = Pokemon.builder()
-                    .id(res.getInt("id"))
-                    .num(res.getString("num"))
-                    .img(res.getString("img"))
-                    .type(res.getType("type"))
-                    .height(res.getString("height"))
-                    .weight(res.getString("weight"))
-                    .candy(res.getString("candy"))
-                    .candyCount(res.getInt("candyCount"))
-                    .egg(res.getString("egg"))
-                    .spawnChance(res.getDouble("spawnChance"))
-                    .avgSpawns(res.getDouble("avgSpawns"))
-                    .spawnTime(res.getString("spawntime"))
-                    .multipliers()
-                    .weaknesses()
-                    .nextEvolution()
-                    .prevEvolution()
-
-                    .build();
-            pokemons.add(pokemon);
+//            var pokemon = Pokemon.builder()
+//                    .id(res.getInt("id"))
+//                    .num(res.getString("num"))
+//                    .img(res.getString("img"))
+//                    //.type(res.getType("type")) //TODO: DO
+//                    .height(res.getString("height"))
+//                    .weight(res.getString("weight"))
+//                    .candy(res.getString("candy"))
+//                    .candyCount(res.getInt("candyCount"))
+//                    .egg(res.getString("egg"))
+//                    .spawnChance(res.getDouble("spawnChance"))
+//                    .avgSpawns(res.getDouble("avgSpawns"))
+//                    .spawnTime(res.getString("spawntime"))
+//                    //.multipliers() //TODO: DO
+//                    //.weaknesses() //TODO: DO
+//                    //.nextEvolution() //TODO: DO
+//                    //.prevEvolution() //TODO: DO
+//
+//                    .build();
+//            pokemons.add(pokemon);
             database.close();
-            return Optional.of(pokemon);
+//            return Optional.of(pokemon);
         }
         database.close();
         return Optional.empty();
 
         }
-
-
     }
 
