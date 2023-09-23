@@ -13,7 +13,11 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 
 public class PokemonController {
@@ -67,9 +71,11 @@ public class PokemonController {
     //List<Pokemon> pokemonMasDeb=pokedex.getPokemon().stream().map(pokemon -> pokemon.getWeaknesses().size());
 
     List<Pokemon> pokemonEvF=pokedex.getPokemon().stream().filter(pokemon -> !pokemon.getNext_evolution().isEmpty()).filter(pokemon -> pokemon.getNext_evolution());
-    List<Pokemon> pokemonMasPes=pokedex.getPokemon().stream().max(filter(pokemon -> pokemon.getWeight()))
-
-
+    List<Pokemon> pokemonMasPes=pokedex.getPokemon().stream().max(Comparator .comparing(pokemon -> pokemon.getName().length())).stream().toList();
+    List<Pokemon> pokemonNombreMasL=pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> pokemon.getName().length())).stream().toList();
+    double pokemonMediaPeso;
+    double pokemonMediaEv=pokedex.getPokemon().stream().mapToDouble(pokemon -> pokemon.getNext_evolution().size() ).average().orElseGet(()->0.0);
+    Map<String, List<Pokemon>> pokeAgrupTip=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
 
     public Pokemon getPokemon(int index) {
         return pokedex.pokemon.get(index);
