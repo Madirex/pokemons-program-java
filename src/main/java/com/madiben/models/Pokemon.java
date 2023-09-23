@@ -23,28 +23,28 @@ public class Pokemon {
     private String candy;
 
     @SerializedName("candy_count")
-    private int candy_count;
+    private int candyCount;
 
     private String egg;
 
     @SerializedName("spawn_chance")
-    private double spawn_chance;
+    private double spawnChance;
 
     @SerializedName("avg_spawns")
-    private double avg_spawns;
+    private double avgSpawns;
 
     @SerializedName("spawn_time")
-    private String spawn_time;
+    private String spawnTime;
 
     private ArrayList<Double> multipliers;
 
     private ArrayList<String> weaknesses;
 
     @SerializedName("next_evolution")
-    private ArrayList<NextEvolution> next_evolution;
+    private ArrayList<NextEvolution> nextEvolution;
 
     @SerializedName("prev_evolution")
-    private ArrayList<PrevEvolution> prev_evolution;
+    private ArrayList<PrevEvolution> prevEvolution;
 
     @Override
     public String toString() {
@@ -57,15 +57,15 @@ public class Pokemon {
                 ", height='" + height + '\'' +
                 ", weight='" + weight + '\'' +
                 ", candy='" + candy + '\'' +
-                ", candy_count=" + candy_count +
+                ", candy_count=" + candyCount +
                 ", egg='" + egg + '\'' +
-                ", spawn_chance=" + spawn_chance +
-                ", avg_spawns=" + avg_spawns +
-                ", spawn_time='" + spawn_time + '\'' +
+                ", spawn_chance=" + spawnChance +
+                ", avg_spawns=" + avgSpawns +
+                ", spawn_time='" + spawnTime + '\'' +
                 ", multipliers=" + multipliers +
                 ", weaknesses=" + weaknesses +
-                ", next_evolution=" + next_evolution +
-                ", prev_evolution=" + prev_evolution +
+                ", next_evolution=" + nextEvolution +
+                ", prev_evolution=" + prevEvolution +
                 '}';
     }
 }
