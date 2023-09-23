@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class NextEvolution {
-    public String num;
-    public String name;
+    private String num;
+    private String name;
 
     @Override
     public String toString() {

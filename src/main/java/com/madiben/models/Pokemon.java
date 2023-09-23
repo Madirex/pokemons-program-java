@@ -1,97 +1,50 @@
 package com.madiben.models;
 
-
-import lombok.Data;
-
+import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
 import java.util.ArrayList;
 
-@Data
+@Getter
 public class Pokemon {
     private int id;
+
     private String num;
+
     private String name;
+
     private String img;
+
     private ArrayList<String> type;
+
     private String height;
+
     private String weight;
+
     private String candy;
+
+    @SerializedName("candy_count")
     private int candy_count;
+
     private String egg;
+
+    @SerializedName("spawn_chance")
     private double spawn_chance;
+
+    @SerializedName("avg_spawns")
     private double avg_spawns;
+
+    @SerializedName("spawn_time")
     private String spawn_time;
+
     private ArrayList<Double> multipliers;
+
     private ArrayList<String> weaknesses;
+
+    @SerializedName("next_evolution")
     private ArrayList<NextEvolution> next_evolution;
+
+    @SerializedName("prev_evolution")
     private ArrayList<PrevEvolution> prev_evolution;
-
-    public int getId() {
-        return id;
-    }
-
-    public String getNum() {
-        return num;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public ArrayList<String> getType() {
-        return type;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public String getCandy() {
-        return candy;
-    }
-
-    public int getCandy_count() {
-        return candy_count;
-    }
-
-    public String getEgg() {
-        return egg;
-    }
-
-    public double getSpawn_chance() {
-        return spawn_chance;
-    }
-
-    public double getAvg_spawns() {
-        return avg_spawns;
-    }
-
-    public String getSpawn_time() {
-        return spawn_time;
-    }
-
-    public ArrayList<Double> getMultipliers() {
-        return multipliers;
-    }
-
-    public ArrayList<String> getWeaknesses() {
-        return weaknesses;
-    }
-
-    public ArrayList<NextEvolution> getNext_evolution() {
-        return next_evolution;
-    }
-
-    public ArrayList<PrevEvolution> getPrev_evolution() {
-        return prev_evolution;
-    }
 
     @Override
     public String toString() {
