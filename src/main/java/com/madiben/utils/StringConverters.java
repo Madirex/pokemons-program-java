@@ -34,7 +34,7 @@ public class StringConverters {
      * @param str String a convertir
      * @return Optional de double
      */
-    public Optional<Double> stringPositiveDoubleValueToDoubleParser(String str) {
+    public Optional<Double> strPositiveValToDoubleParser(String str) {
         boolean isPostDecimalPoint = false;
         double convertedNum = 0;
 

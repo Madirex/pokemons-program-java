@@ -10,5 +10,17 @@ public class PokemonDataDTO {
     private String num;
     private double height;
     private double width;
+
+    /**
+     * Constructor de la clase PokemonDataDTO
+     *
+     * @param num    Número del pokemon
+     * @param height Altura del pokemon
+     * @param width  Peso del pokemon
+     */
+    public PokemonDataDTO(String num, double height, double width) {
+        this.num = num;
+        this.height = height;
+        this.width = width;
+    }
 }
-//TODO: Exporta a csv los siguientes datos de pokemons: id, num, name, height, width.

@@ -1,20 +1,36 @@
 package com.madiben;
 
 import com.madiben.controller.PokemonController;
+import com.madiben.dto.PokemonDataDTO;
+import com.madiben.io.CsvManager;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokemon;
 import com.madiben.utils.StringConverters;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+/**
+ * Clase principal del programa
+ */
 public class PokemonProgram {
 
     private static PokemonProgram pokemonProgramInstance;
 
+    /**
+     * Constructor privado para evitar instanciación
+     */
     private PokemonProgram() {
     }
 
+    /**
+     * Método singleton para obtener la instancia de la clase
+     *
+     * @return Instancia de la clase
+     */
     public static PokemonProgram getInstance() {
         if (pokemonProgramInstance == null) {
             pokemonProgramInstance = new PokemonProgram();
@@ -23,10 +39,41 @@ public class PokemonProgram {
     }
 
 
+    /**
+     * Método inicializador del programa
+     */
     public void init() {
         printConsoleData();
+        csvExportData();
+        Optional<Stream<PokemonDataDTO>> pokemons = readFileGetPokemonDataDTOAndPrint("");
+        stringDataToDatabaseAndPrint(pokemons);
+        printPokemonDataFromDatabase("Pikachu");
     }
-    private void printConsoleData(){
+
+    private void printPokemonDataFromDatabase(String pokemonName) {
+        //        TODO: Desde la base de datos, saca la información de Pikachu.
+    }
+
+    private void stringDataToDatabaseAndPrint(Optional<Stream<PokemonDataDTO>> data) {
+        //        TODO: Introduce los datos que has importado de un CSV en una base de datos en fichero como H2 o SQLite y luego realiza un select para ver el resultado de las operaciones. Los datos de conexión deben estar encapsulados en un manejador y leídos de un fichero de propiedades o de entorno.
+    }
+
+    private void csvExportData() {
+                String rutaDelArchivo = "/ruta/al/archivo.csv";
+        //        TODO: Exporta a csv los siguientes datos de pokemons: id, num, name, height, width.
+    }
+
+    private Optional<Stream<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
+        Optional<Stream<PokemonDataDTO>> pokemons = CsvManager.getInstance().fileToPokemonDataDTO(path);
+        if (pokemons.isPresent()) {
+            pokemons.get().forEach(System.out::println);
+        } else {
+            System.out.println("No se ha podido leer el archivo.");
+        }
+        return pokemons;
+    }
+
+    private void printConsoleData() {
         System.out.println("\nNombre los 10 primeros Pokémon:\n" + PokemonController.getInstance().getFirstPokemonNames(10));
         System.out.println("\nNombre de los 5 últimos Pokémon:\n" + PokemonController.getInstance().getLastPokemonNames(5));
         System.out.println("\nDatos de Pikachu:\n" + printPokemonByName("Pikachu"));
@@ -50,10 +97,9 @@ public class PokemonProgram {
 //        TODO: Pokemons agrupados por número de evoluciones.
 //        TODO: Sacar la debilidad más común.
 
-//        TODO: Exporta a csv los siguientes datos de pokemons: id, num, name, height, width.
-//        TODO: Lee el fichero que has exportado y sácalo por pantalla
-//        TODO: Introduce los datos que has importado de un CSV en una base de datos en fichero como H2 o SQLite y luego realiza un select para ver el resultado de las operaciones. Los datos de conexión deben estar encapsulados en un manejador y leídos de un fichero de propiedades o de entorno.
-//        TODO: Desde la base de datos, saca la información de Pikachu.
+
+
+
 
 
 //        StringConverters stringConverter = StringConverters.getInstance();
@@ -94,12 +140,13 @@ public class PokemonProgram {
 
     /**
      * Imprime por consola la siguiente evolución del Pokémon con el nombre indicado
+     *
      * @param name Nombre del Pokémon
      */
     private static String printNextEvolutionByName(String name) {
         Optional<ArrayList<NextEvolution>> evCharmander = PokemonController.getInstance().getEvolutionsByPokemonName(name);
         String nextEvolution = "No se ha encontrado el Pokémon";
-        if (evCharmander.isPresent()){
+        if (evCharmander.isPresent()) {
             nextEvolution = evCharmander.get().get(0).toString();
         }
         return nextEvolution;
@@ -107,12 +154,13 @@ public class PokemonProgram {
 
     /**
      * Imprime por consola los datos del pokémon con el nombre indicado
+     *
      * @param name Nombre del Pokémon
      */
     private String printPokemonByName(String name) {
         Optional<Pokemon> pikachuOpt = PokemonController.getInstance().getPokemonByName(name);
         String pikachu = "No se ha encontrado el Pokémon";
-        if (pikachuOpt.isPresent()){
+        if (pikachuOpt.isPresent()) {
             pikachu = pikachuOpt.get().toString();
         }
         return pikachu;
