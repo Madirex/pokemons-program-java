@@ -36,7 +36,7 @@ public class PokemonController {
         Path currentRelativePath = Paths.get("");
         String ruta = currentRelativePath.toAbsolutePath().toString();
         String dir = ruta + File.separator + "data";
-        String paisesFile = dir + File.separator + "pokemon.json";
+        String paisesFile = dir + File.separator + "data/pokemon.json";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         // Actualizar a try-with-resources
@@ -67,7 +67,7 @@ public class PokemonController {
     //List<Pokemon> pokemonMasDeb=pokedex.getPokemon().stream().map(pokemon -> pokemon.getWeaknesses().size());
 
     List<Pokemon> pokemonEvF=pokedex.getPokemon().stream().filter(pokemon -> !pokemon.getNext_evolution().isEmpty()).filter(pokemon -> pokemon.getNext_evolution());
-
+    List<Pokemon> pokemonMasPes=pokedex.getPokemon().stream().max(filter(pokemon -> pokemon.getWeight()))
 
 
 
