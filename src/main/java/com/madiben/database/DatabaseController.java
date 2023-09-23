@@ -1,12 +1,9 @@
-package com.madirex.database;
+package com.madiben.database;
 
-import com.madirex.utils.ApplicationProperties;
+import com.madiben.utils.ApplicationProperties;
 import lombok.NonNull;
 import io.github.cdimascio.dotenv.Dotenv;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
+
 import java.sql.*;
 import java.util.Optional;
 

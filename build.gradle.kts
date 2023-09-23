@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "com.madirex"
+group = "com.madiben"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -15,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.h2database:h2:2.2.224")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {
