@@ -10,7 +10,10 @@ import com.madiben.models.Pokemon;
 import com.madiben.utils.StringConverters;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.Reader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,15 +37,24 @@ public class PokemonController {
         return instance;
     }
 
+    private File loadResource(String resourceName){
+        URL resource = getClass().getClassLoader().getResource( "data" + File.separator + resourceName);
+        try {
+            if (resource == null) {
+                throw new IllegalArgumentException("¡archivo no encontrado!");
+            } else {
+                return new File(resource.toURI());
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("¡archivo no encontrado!");
+        }
+    }
+
     private void loadPokedex() {
-        Path currentRelativePath = Paths.get("");
-        String ruta = currentRelativePath.toAbsolutePath().toString();
-        String dir = ruta + File.separator + "data";
-        String paisesFile = dir + File.separator + "data/pokemon.json";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         // Actualizar a try-with-resources
-        try (Reader reader = Files.newBufferedReader(Paths.get(paisesFile))) {
+        try (Reader reader = new FileReader(loadResource("pokemon.json"))) {
             this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>() {}.getType());
             System.out.println("Pokedex loaded! There are: " + pokedex.getPokemon().size());
         } catch (Exception e) {
@@ -54,7 +66,6 @@ public class PokemonController {
     //Ultimos 5
     List<String> pokemon5=pokedex.getPokemon().stream().skip(cantPoke-5).map(Pokemon::getName).toList();
     //Primeros 10
-
     List<String> pokemon10=pokedex.getPokemon().stream().limit(10).map(Pokemon::getName).toList();
     //Informacion de Pikachu
     List<Pokemon> pikachu=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().contains("Pikachu")).toList();
