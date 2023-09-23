@@ -1,10 +1,12 @@
 package com.madiben.models;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Builder;
 import lombok.Getter;
 import java.util.ArrayList;
 
 @Getter
+@Builder
 public class Pokemon {
     private int id;
 

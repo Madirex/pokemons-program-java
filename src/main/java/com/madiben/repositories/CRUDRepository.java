@@ -1,5 +1,6 @@
 package com.madiben.repositories;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public interface CRUDRepository<T, ID> {
      *
      * @return Optional de la lista de elementos
      */
-    Optional<List<T>> findAll();
+    Optional<List<T>> findAll() throws SQLException;
 
     /**
      * Devuelve un elemento del repositorio
@@ -23,7 +24,7 @@ public interface CRUDRepository<T, ID> {
      * @param id Id del elemento a buscar
      * @return Optional del elemento encontrado
      */
-    Optional<T> findById(ID id);
+    Optional<T> findById(ID id) throws SQLException;
 
     /**
      * Guarda un elemento en el repositorio
@@ -31,7 +32,7 @@ public interface CRUDRepository<T, ID> {
      * @param entity Elemento a guardar
      * @return Optional del elemento guardado
      */
-    Optional<T> save(T entity);
+    Optional<T> save(T entity) throws SQLException;
 
     /**
      * Actualiza un elemento del repositorio
@@ -40,7 +41,7 @@ public interface CRUDRepository<T, ID> {
      * @param entity Elemento con los nuevos datos
      * @return Optional del elemento actualizado
      */
-    Optional<T> update(ID id, T entity);
+    Optional<T> update(ID id, T entity) throws SQLException;
 
     /**
      * Borra un elemento del repositorio
@@ -48,5 +49,5 @@ public interface CRUDRepository<T, ID> {
      * @param id Id del elemento a borrar
      * @return Optional del elemento borrado
      */
-    Optional<T> delete(ID id);
+    Optional<T> delete(ID id) throws SQLException;
 }

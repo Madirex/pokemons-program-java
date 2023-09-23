@@ -2,6 +2,7 @@ package com.madiben.repositories;
 
 import com.madiben.models.Pokemon;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public interface PokemonRepository extends CRUDRepository<Pokemon, Integer>{
@@ -11,5 +12,5 @@ public interface PokemonRepository extends CRUDRepository<Pokemon, Integer>{
      * @param name Nombre del elemento a buscar
      * @return Optional del elemento encontrado
      */
-    Optional<Pokemon> findByName(String name);
+    Optional<Pokemon> findByName(String name) throws SQLException;
 }
