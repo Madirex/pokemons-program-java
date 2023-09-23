@@ -2,7 +2,7 @@ package com.madiben.models;
 
 import lombok.Data;
 
-@Data
+//@Data
 public class PrevEvolution {
     private String num;
     private String name;
@@ -14,4 +14,6 @@ public class PrevEvolution {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
 }

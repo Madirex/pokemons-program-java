@@ -5,8 +5,11 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+//@Data
 public class Pokedex {
     private List<Pokemon> pokemon;
 
+    public List<Pokemon> getPokemon() {
+        return pokemon;
+    }
 }

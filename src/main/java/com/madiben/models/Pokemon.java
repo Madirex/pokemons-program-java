@@ -1,10 +1,9 @@
 package com.madiben.models;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
 import java.util.ArrayList;
 
-@Getter
+//@Getter
 public class Pokemon {
     private int id;
 
@@ -67,6 +66,74 @@ public class Pokemon {
                 ", next_evolution=" + nextEvolution +
                 ", prev_evolution=" + prevEvolution +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public ArrayList<String> getType() {
+        return type;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public String getCandy() {
+        return candy;
+    }
+
+    public int getCandyCount() {
+        return candyCount;
+    }
+
+    public String getEgg() {
+        return egg;
+    }
+
+    public double getSpawnChance() {
+        return spawnChance;
+    }
+
+    public double getAvgSpawns() {
+        return avgSpawns;
+    }
+
+    public String getSpawnTime() {
+        return spawnTime;
+    }
+
+    public ArrayList<Double> getMultipliers() {
+        return multipliers;
+    }
+
+    public ArrayList<String> getWeaknesses() {
+        return weaknesses;
+    }
+
+    public ArrayList<NextEvolution> getNextEvolution() {
+        return nextEvolution;
+    }
+
+    public ArrayList<PrevEvolution> getPrevEvolution() {
+        return prevEvolution;
     }
 }
 
