@@ -7,15 +7,14 @@ import com.google.gson.reflect.TypeToken;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokedex;
 import com.madiben.models.Pokemon;
+import com.madiben.utils.StringConverters;
 
 import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -68,14 +67,26 @@ public class PokemonController {
 
     List<String> pokemonW=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().contains("water")).map(Pokemon::getName).toList();
     long pokemon1d=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().size()==1).count();
-    //List<Pokemon> pokemonMasDeb=pokedex.getPokemon().stream().map(pokemon -> pokemon.getWeaknesses().size());
 
+    StringConverters stringConverter= StringConverters.getInstance();
     List<Pokemon> pokemonEvF=pokedex.getPokemon().stream().filter(pokemon -> !pokemon.getNext_evolution().isEmpty()).filter(pokemon -> pokemon.getNext_evolution());
-    List<Pokemon> pokemonMasPes=pokedex.getPokemon().stream().max(Comparator .comparing(pokemon -> pokemon.getName().length())).stream().toList();
-    List<Pokemon> pokemonNombreMasL=pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> pokemon.getName().length())).stream().toList();
-    double pokemonMediaPeso;
+    Pokemon pokemonMasPes=pokedex.getPokemon().stream().max(Comparator.comparingDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getWeight()).orElse(0.0))).get();
+    Pokemon pokemonNombreMasL=pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> pokemon.getName().length())).stream().toList().get(0);
+    Pokemon pokemonMasAlto=pokedex.getPokemon().stream().max(Comparator.comparingDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getHeight()).orElse(0.0))).get();
+    double pokemonMediaPeso = pokedex.getPokemon().stream()
+            .mapToDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getWeight()).orElse(0.0))
+            .average()
+            .orElse(0.0);
+
+    double pokemonMediaAltura = pokedex.getPokemon().stream()
+            .mapToDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getHeight()).orElse(0.0))
+            .average()
+            .orElse(0.0);
     double pokemonMediaEv=pokedex.getPokemon().stream().mapToDouble(pokemon -> pokemon.getNext_evolution().size() ).average().orElseGet(()->0.0);
     Map<String, List<Pokemon>> pokeAgrupTip=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
+    Map<Integer, List<Pokemon>> pokeAgrupEv=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getNext_evolution().size()));
+
+
 
     public Pokemon getPokemon(int index) {
         return pokedex.pokemon.get(index);
