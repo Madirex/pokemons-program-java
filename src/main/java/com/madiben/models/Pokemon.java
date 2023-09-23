@@ -50,7 +50,7 @@ public class Pokemon {
 
     @Override
     public String toString() {
-        return "Pokemon{" +
+        return "\nPokemon{" +
                 "id=" + id +
                 ", num='" + num + '\'' +
                 ", name='" + name + '\'' +

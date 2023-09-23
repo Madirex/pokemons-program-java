@@ -8,15 +8,13 @@ import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokedex;
 import com.madiben.models.Pokemon;
 import com.madiben.utils.StringConverters;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,6 @@ public class PokemonController {
 
 
     private PokemonController() {
-        loadPokedex();
     }
 
     public static PokemonController getInstance() {
@@ -41,85 +38,64 @@ public class PokemonController {
         URL resource = getClass().getClassLoader().getResource( "data" + File.separator + resourceName);
         try {
             if (resource == null) {
-                throw new IllegalArgumentException("¡archivo no encontrado!");
+                throw new IllegalArgumentException("¡Archivo no encontrado!");
             } else {
                 return new File(resource.toURI());
             }
         } catch (URISyntaxException e) {
-            throw new RuntimeException("¡archivo no encontrado!");
+            throw new RuntimeException("¡Archivo no encontrado!");
         }
     }
 
-    private void loadPokedex() {
+    public void loadPokedex() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         // Actualizar a try-with-resources
         try (Reader reader = new FileReader(loadResource("pokemon.json"))) {
             this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>() {}.getType());
-            System.out.println("Pokedex loaded! There are: " + pokedex.getPokemon().size());
         } catch (Exception e) {
-            System.out.println("Error loading Pokedex!");
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error cargando la Pokédex!\n" + e.getMessage());
         }
     }
-    long cantPoke=151;
-    //Ultimos 5
-    List<String> pokemon5=pokedex.getPokemon().stream().skip(cantPoke-5).map(Pokemon::getName).toList();
-    //Primeros 10
-    List<String> pokemon10=pokedex.getPokemon().stream().limit(10).map(Pokemon::getName).toList();
-    //Informacion de Pikachu
-    List<Pokemon> pikachu=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().contains("Pikachu")).toList();
-    //Evolucion de Charmander
-    List<NextEvolution> evCharmander=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getType().contains("Charmander")).map(Pokemon::getNextEvolution).toList().get(0);
 
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
 
+    public long countPokemonsWithANumberOfWeaknesses(int q) {
+        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().size() == q).count();
+    }
 
-    //Nombre pokemon de tipo fuego
-    List<String> pokemonF=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getType().contains("Fire")).map(Pokemon::getName).toList();
-    //Numero de pokemon con una debilidad
-    long pokemon1d=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().size()==1).count();
+    public List<Pokemon> filterByWeaknessesAnyMatch(List<String> weaknesses) {
+        return pokedex.getPokemon().stream().filter(pokemon -> weaknesses.stream()
+                        .anyMatch(pokemon.getWeaknesses()::contains)).distinct().toList();
+    }
 
-    StringConverters stringConverter= StringConverters.getInstance();
-    //Pokemon con debilidad al Water y Electric
-    String pokemonWeakWatElec=pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().contains("Water")&& pokemon.getWeaknesses().contains("Electric")).toList().get(0).getName();
-    //Pokemon con mas debilidades
-    Pokemon pokemonMasDeb=pokedex.getPokemon().stream().max(Comparator.comparingDouble(pokemon->pokemon.getWeaknesses().size())).get();
-   //Pokemon con menos evoluciones
-    Pokemon pokemonMenosEv=pokedex.getPokemon().stream().min(Comparator.comparingDouble(pokemon -> pokemon.getNextEvolution().size())).get();
-    //Pokemon cuya evolucion no es de tipo fire
-    Pokemon pokemonNoEvFire=pokedex.getPokemon().stream().filter(pokemon -> !pokemon.getNextEvolution().contains("Fire")).toList().get(0);
+    public List<Pokemon> filterByWeaknessesContainsAll(List<String> weaknesses) {
+        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().containsAll(weaknesses)).toList();
+    }
 
-    //Pokemon mas Pesado
-    Pokemon pokemonMasPes=pokedex.getPokemon().stream().max(Comparator.comparingDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getWeight()).orElse(0.0))).get();
-    //Pokemon con nombre mas largo
-    Pokemon pokemonNombreMasL=pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> pokemon.getName().length())).stream().toList().get(0);
-    //Pokemon mas alto
-    Pokemon pokemonMasAlto=pokedex.getPokemon().stream().max(Comparator.comparingDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getHeight()).orElse(0.0))).get();
-    //Media de peso de Pokemon
-    double pokemonMediaPeso = pokedex.getPokemon().stream()
-            .mapToDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getWeight()).orElse(0.0))
-            .average()
-            .orElse(0.0);
+    public List<String> getPokemonsFilterByTypeName(String typeName) {
+        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getType().contains(typeName))
+                .map(Pokemon::getName).toList();
+    }
 
-    //Media de altura de Pokemon
-    double pokemonMediaAltura = pokedex.getPokemon().stream()
-            .mapToDouble(pokemon -> stringConverter.stringPositiveDoubleValueToDoubleParser(pokemon.getHeight()).orElse(0.0))
-            .average()
-            .orElse(0.0);
-   //Media de evoluciones de Pokemons
-    double pokemonMediaEv=pokedex.getPokemon().stream().mapToDouble(pokemon -> pokemon.getNextEvolution().size() ).average().orElseGet(()->0.0);
-    //Agrupar por tipo
-    Map<String, List<Pokemon>> pokeAgrupTip=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
-   //Agrupar por numero de evoluciones
-    Map<Integer, List<Pokemon>> pokeAgrupEv=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getNextEvolution().size()));
-    //Agrupar por debilidades
-    Map<String, List<Pokemon>> pokeAgrupWeak=pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getWeaknesses().toString() ));
-    //Debilidad mas comun
+    public Optional<ArrayList<NextEvolution>> getEvolutionsByPokemonName(String name) {
+        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().equalsIgnoreCase(name))
+                .map(Pokemon::getNextEvolution).findFirst();
+    }
 
+    public Optional<Pokemon> getPokemonByName(String name) {
+        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().equalsIgnoreCase(name)).findFirst();
+    }
 
+    public List<String> getFirstPokemonNames(int q) {
+        return pokedex.getPokemon().stream().limit(q).map(Pokemon::getName).toList();
+    }
 
-    public Pokemon getPokemon(int index) {
-        return pokedex.getPokemon().get(index);
+    public List<String> getLastPokemonNames(long q) {
+        return pokedex.getPokemon().stream().skip(pokedex.getPokemon().size() - q)
+                .map(Pokemon::getName).toList();
     }
 }
 

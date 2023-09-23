@@ -1,12 +1,17 @@
 package com.madiben;
 
 import com.madiben.controller.PokemonController;
+import com.madiben.models.NextEvolution;
+import com.madiben.models.Pokemon;
+import com.madiben.utils.StringConverters;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Main {
     public static void main(String[] args) {
         //TODO: Implementar la lógica de la aplicación
-        PokemonController.getInstance();
+        PokemonController.getInstance().loadPokedex();
+        PokemonProgram.getInstance().init();
     }
 }

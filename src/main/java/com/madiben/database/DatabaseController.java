@@ -77,6 +77,7 @@ public class DatabaseController {
     public void close() throws SQLException {
         preparedStatement.close();
         connection.close();
+
     }
 
     /**
