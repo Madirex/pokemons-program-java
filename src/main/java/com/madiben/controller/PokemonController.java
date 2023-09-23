@@ -7,8 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokedex;
 import com.madiben.models.Pokemon;
-import com.madiben.utils.StringConverters;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,8 +14,6 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
-
 
 public class PokemonController {
     private static PokemonController instance;
@@ -34,8 +30,8 @@ public class PokemonController {
         return instance;
     }
 
-    private File loadResource(String resourceName){
-        URL resource = getClass().getClassLoader().getResource( "data" + File.separator + resourceName);
+    private File loadResource(String resourceName) {
+        URL resource = getClass().getClassLoader().getResource("data" + File.separator + resourceName);
         try {
             if (resource == null) {
                 throw new IllegalArgumentException("¡Archivo no encontrado!");
@@ -52,7 +48,8 @@ public class PokemonController {
 
         // Actualizar a try-with-resources
         try (Reader reader = new FileReader(loadResource("pokemon.json"))) {
-            this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>() {}.getType());
+            this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>() {
+            }.getType());
         } catch (Exception e) {
             System.out.println("Error cargando la Pokédex!\n" + e.getMessage());
         }
@@ -68,7 +65,7 @@ public class PokemonController {
 
     public List<Pokemon> filterByWeaknessesAnyMatch(List<String> weaknesses) {
         return pokedex.getPokemon().stream().filter(pokemon -> weaknesses.stream()
-                        .anyMatch(pokemon.getWeaknesses()::contains)).distinct().toList();
+                .anyMatch(pokemon.getWeaknesses()::contains)).distinct().toList();
     }
 
     public List<Pokemon> filterByWeaknessesContainsAll(List<String> weaknesses) {

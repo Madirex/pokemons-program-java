@@ -9,8 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación de la interfaz PokemonRepository
+ */
 public class PokemonRepositoryImpl implements PokemonRepository {
     private final DatabaseController database;
+    
+    /**
+     * Constructor de la clase PokemonRepositoryImpl
+     *
+     * @param database Instancia de la clase DatabaseController
+     */
 
     public PokemonRepositoryImpl(DatabaseController database) {
         this.database = database;
