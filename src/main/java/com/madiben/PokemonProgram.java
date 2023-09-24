@@ -4,6 +4,7 @@ import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.io.CsvManager;
 import com.madiben.models.NextEvolution;
+import com.madiben.models.Pokedex;
 import com.madiben.models.Pokemon;
 import com.madiben.utils.Utils;
 
@@ -71,6 +72,8 @@ public class PokemonProgram {
         return pokemons;
     }
 
+     */
+
     private String separator(){
         return "\n----------------------------------------\n";
     }
@@ -95,9 +98,10 @@ public class PokemonProgram {
         Utils.print(separator() + "(15) Media de altura de los Pokémon:\n" + String.format("%.2f",pc.getPokemonHeightAvg()));
         Utils.print(separator() + "(16) Media de evoluciones de los Pokémon:\n" + String.format("%.2f",pc.getPokemonEvolutionAvg()));
         Utils.print(separator() + "(17) Media de debilidades de los Pokémon:\n" + String.format("%.2f",pc.getPokemonWeaknessesAvg()));
-        printMap(pc.groupPokemonByType(), separator() + "(18) Pokémon agrupados por tipo:\n", "Tipo"); //TODO: FIX
-        printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad"); //TODO: FIX - es números. O sea, cantidad
+        printMap(pc.groupPokemonByType(), separator() + "(18) Pokémon agrupados por tipo:\n", "Tipo");
+        printMap(pc.groupPokemonByWeaknesses(), separator() + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
         printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
+
         //TODO: Sacar la debilidad más común.
     }
 
@@ -152,12 +156,12 @@ public class PokemonProgram {
      * @param mapKeyName Nombre de la clave del mapa
      * @param <T> Tipo de la clave del mapa
      */
-    private <T> void printMap(Map<T, List<Pokemon>> map, String title, String mapKeyName){
+    private <T,L> void printMap(Map<T, L> map, String title, String mapKeyName){
         Utils.print(title);
         map.forEach((type, pokemonList) -> {
             Utils.print("\n" + mapKeyName + ": " + type);
 
-            if (!pokemonList.isEmpty()) {
+            if (pokemonList instanceof List<?> && !pokemonList.isEmpty()) {
                 for (int i = 0; i < pokemonList.size(); i++) {
                     Utils.print("\t(" + (i + 1) + ") Nombre: " + pokemonList.get(i).getName());
                 }

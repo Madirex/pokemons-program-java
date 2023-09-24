@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PokemonController {
     private static PokemonController instance;
@@ -65,10 +66,17 @@ public class PokemonController {
     }
 
     @NotNull
-    private Map<String, List<Pokemon>> groupPokemonByWeaknesses() {
-        return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getWeaknesses().toString()));
-        //TODO: FIX
+    public Map<String, Long> groupPokemonByWeaknesses() {
+        return pokedex.getPokemon().stream()
+                .flatMap(pokemon -> pokemon.getWeaknesses().stream())
+                .distinct()
+                .collect(Collectors.toMap(
+                        weakness -> weakness,
+                        weakness -> pokedex.getPokemon().stream()
+                                .filter(pokemon -> pokemon.getWeaknesses().contains(weakness)).count())
+                );
     }
+
 
     @NotNull
     public Map<Integer, List<Pokemon>> groupPokemonByEvolutionNumber() {
@@ -77,19 +85,15 @@ public class PokemonController {
 
     @NotNull
     public Map<String, List<Pokemon>> groupPokemonByType() {
-       return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
-       //TODO: FIX
-//        Stream<String> types = pokedex.getPokemon()
-//                .stream()
-//                .distinct()
-//                .flatMap(pokemon -> pokemon.getType().stream()); //uno a muchos
-//
-//        return types.collect(Collectors.groupingBy(
-//                type -> type,
-//                type -> pokedex.getPokemon().stream()
-//                        .filter(pokemon -> pokemon.getType().contains(type))
-//                        .collect(Collectors.toList()))
-//        );
+        return pokedex.getPokemon().stream()
+                .flatMap(pokemon -> pokemon.getType().stream())
+                .distinct()
+                .collect(Collectors.toMap(
+                        type -> type,
+                        type -> pokedex.getPokemon().stream()
+                                .filter(pokemon -> pokemon.getType().contains(type))
+                                .collect(Collectors.toList())
+                ));
     }
 
     public double getPokemonWeaknessesAvg() {
