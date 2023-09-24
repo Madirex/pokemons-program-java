@@ -80,19 +80,18 @@ public class PokemonProgram {
         Utils.print("\n(6) Pokémon con debilidad Water o Electric:\n" + pc
                 .filterByWeaknessesAnyMatch(new ArrayList<>(Arrays.asList("Water", "Electric"))));
         Utils.print("\n(7) Pokémon con solo una debilidad:\n" + pc.countPokemonsWithANumberOfWeaknesses(1));
-
-//        TODO: TESTEAR QUE LOS DATOS OBTENIDOS DE ABAJO SON CORRECTOS
         Utils.print("\n(8) Pokémon con más debilidades:\n" + getPokemonData(pc.getPokemonWithMoreWeaknesses()));
-        Utils.print("\n(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
-        Utils.print("\n(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
-                getPokemonData(getFirstPokemonOfList(pc.pokemonListExcludeByEvolution("Fire"))));
         Utils.print("\n(11) Pokémon más pesado:\n" + getPokemonData(pc.getHighestWeightPokemon()));
         Utils.print("\n(12) Pokémon más alto:\n" + getPokemonData(pc.getHeighestPokemon()));
         Utils.print("\n(13) Pokémon con el nombre más largo:\n" + getPokemonData(pc.getPokemonWithLongestName()));
+//        TODO: TESTEAR QUE LOS DATOS OBTENIDOS DE ABAJO SON CORRECTOS
+        // TODO: Utils.print("\n(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
+        // TODO: Utils.print("\n(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
+        //       getPokemonData(getFirstPokemonOfList(pc.pokemonListExcludeByEvolution("Fire"))));
         Utils.print("\n(14) Media de peso de los Pokémon:\n" + pc.getPokemonWeightAvg());
         Utils.print("\n(15) Media de altura de los Pokémon:\n" + pc.getPokemonHeightAvg());
-        Utils.print("\n(16) Media de evoluciones de los Pokémon:\n" + pc.getPokemonEvolutionAvg());
-        Utils.print("\n(17) Media de debilidades de los Pokémon:\n" + pc.getPokemonWeaknessesAvg());
+        //TODO: Utils.print("\n(16) Media de evoluciones de los Pokémon:\n" + pc.getPokemonEvolutionAvg());
+        //TODO: Utils.print("\n(17) Media de debilidades de los Pokémon:\n" + pc.getPokemonWeaknessesAvg());
         //printMap
 //        TODO: Pokemons agrupados por tipo.
 //        TODO: Numero de pokemons agrupados por debilidad.

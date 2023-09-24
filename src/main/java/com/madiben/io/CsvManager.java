@@ -25,15 +25,15 @@ public class CsvManager {
     }
 
     public Optional<Stream<PokemonDataDTO>> fileToPokemonDataDTO(String path) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            return Optional.of(reader.lines()
-                    .map(line -> line.split(","))
-                    .map(values -> new PokemonDataDTO(values[0],
-                            StringConverters.getInstance().strPositiveValToDoubleParser(values[1]).orElse(0.0),
-                            StringConverters.getInstance().strPositiveValToDoubleParser(values[2]).orElse(0.0))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+//            return Optional.of(reader.lines()
+//                    .map(line -> line.split(","))
+//                    .map(values -> new PokemonDataDTO(values[0],
+//                            StringConverters.getInstance().strPositiveValToDoubleParser(values[1]).orElse(0.0),
+//                            StringConverters.getInstance().strPositiveValToDoubleParser(values[2]).orElse(0.0))));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return Optional.empty();
     }
 }

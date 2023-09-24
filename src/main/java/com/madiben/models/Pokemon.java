@@ -2,10 +2,12 @@ package com.madiben.models;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 
-//@Getter
+@Getter
 //@Builder
 public class Pokemon {
     private int id;
@@ -16,6 +18,7 @@ public class Pokemon {
 
     private String img;
 
+    @NonNull
     private ArrayList<String> type;
 
     private String height;
@@ -38,14 +41,17 @@ public class Pokemon {
     @SerializedName("spawn_time")
     private String spawnTime;
 
+    @NonNull
     private ArrayList<Double> multipliers;
 
+    @NonNull
     private ArrayList<String> weaknesses;
 
     @SerializedName("next_evolution")
     private ArrayList<NextEvolution> nextEvolution;
 
     @SerializedName("prev_evolution")
+    @NonNull
     private ArrayList<PrevEvolution> prevEvolution;
 
     @Override
@@ -71,72 +77,5 @@ public class Pokemon {
                 '}';
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getNum() {
-        return num;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public ArrayList<String> getType() {
-        return type;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public String getCandy() {
-        return candy;
-    }
-
-    public int getCandyCount() {
-        return candyCount;
-    }
-
-    public String getEgg() {
-        return egg;
-    }
-
-    public double getSpawnChance() {
-        return spawnChance;
-    }
-
-    public double getAvgSpawns() {
-        return avgSpawns;
-    }
-
-    public String getSpawnTime() {
-        return spawnTime;
-    }
-
-    public ArrayList<Double> getMultipliers() {
-        return multipliers;
-    }
-
-    public ArrayList<String> getWeaknesses() {
-        return weaknesses;
-    }
-
-    public ArrayList<NextEvolution> getNextEvolution() {
-        return nextEvolution;
-    }
-
-    public ArrayList<PrevEvolution> getPrevEvolution() {
-        return prevEvolution;
-    }
 }
 

@@ -109,7 +109,8 @@ public class PokemonController {
     }
 
     public Optional<Pokemon> getPokemonWithLongestName() {
-        return pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> pokemon.getName().length()));
+        return pokedex.getPokemon().stream().max(Comparator.comparing(pokemon -> StringConverters
+                .getInstance().parsePokemonName(pokemon.getName()).length()));
     }
 
     public Optional<Pokemon> getHighestWeightPokemon() {

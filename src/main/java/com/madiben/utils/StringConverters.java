@@ -85,4 +85,24 @@ public class StringConverters {
     private boolean charIsNumber(char ch){
         return ch >= '0' && ch <= '9';
     }
+
+    /**
+     * Este método parsea el nombre de un Pokémon (eliminando el género de delante)
+     * Excluye lo que viene después del símbolo ASCII 226
+     * @param name Nombre del Pokémon
+     * @return Nombre del Pokémon sin el género (excluyendo lo que viene después del símbolo ASCII 226)
+     */
+    public String parsePokemonName(String name) {
+        StringBuilder pokemonName = new StringBuilder();
+        for (int i = 0; i < name.length(); i++) {
+            if (name.charAt(i) == 226) {
+                if (i - 1 > 0 && name.charAt(i - 1) == ' ') {
+                    pokemonName.deleteCharAt(i - 1);
+                }
+                break;
+            }
+            pokemonName.append(name.charAt(i));
+        }
+        return pokemonName.toString();
+    }
 }

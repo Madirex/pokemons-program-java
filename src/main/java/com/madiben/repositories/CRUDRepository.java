@@ -8,7 +8,7 @@ import java.util.Optional;
  * Interfaz que define las operaciones CRUD sobre un repositorio
  *
  * @param <T>  Tipo de la entidad
- * @param <ID> Tipo del id de la entidad
+ * @param <ID> Tipo del ID de la entidad
  */
 public interface CRUDRepository<T, ID> {
     /**
