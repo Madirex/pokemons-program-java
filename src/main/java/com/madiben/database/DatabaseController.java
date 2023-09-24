@@ -4,6 +4,9 @@ import com.madiben.utils.ApplicationProperties;
 import lombok.NonNull;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.Optional;
 
@@ -24,6 +27,8 @@ public class DatabaseController {
     private String password;
     @NonNull
     private String driver;
+    @NonNull
+    private String init;
     @NonNull
     private Connection connection;
     @NonNull
@@ -56,18 +61,20 @@ public class DatabaseController {
         serverPort = properties.readProperty("db.port");
         dataBaseName = properties.readProperty("db.name");
         driver = properties.readProperty("db.driver");
+        init = properties.readProperty("db.init");
         Dotenv dotenv = Dotenv.load();
         user = dotenv.get("DATABASE_USER");
         password = dotenv.get("DATABASE_PASSWORD");
     }
 
     /**
-     * Abre la conexión con el servidor  de Base de Datos
+     * Abre la conexión con el servidor de Base de Datos
      * @throws SQLException Servidor no accesible por problemas de conexión o datos de acceso incorrectos
      */
     public void open() throws SQLException {
-        String url = this.driver + this.serverUrl + ":" + this.serverPort + "/" + this.dataBaseName;
+        String url = this.driver + /*this.serverUrl + ":" +  this.serverPort +*/ File.separator + this.dataBaseName; //TODO: FIX
         connection = DriverManager.getConnection(url, user, password);
+        initData();
     }
 
     /**
@@ -77,7 +84,26 @@ public class DatabaseController {
     public void close() throws SQLException {
         preparedStatement.close();
         connection.close();
+    }
 
+    /**
+     * Inicializa la base de datos con los datos del fichero data.sql
+     * Solo si el properties tiene la propiedad db.init en TRUE
+     */
+    public void initData() {
+        if (init.equalsIgnoreCase("true")) {
+            try {
+                String sql = new String(getClass().getClassLoader()
+                        .getResourceAsStream("data.sql").readAllBytes(), StandardCharsets.UTF_8);
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    preparedStatement.execute();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**

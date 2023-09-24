@@ -46,16 +46,27 @@ public class PokemonProgram {
     public void init() {
         printConsoleData();
         csvExportData();
-        stringDataToDatabaseAndPrint(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
+        pokemonDataToDatabaseAndSelect(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
         printPokemonDataFromDatabase("Pikachu");
     }
 
     private void printPokemonDataFromDatabase(String pokemonName) {
-        //        TODO: Desde la base de datos, saca la información de Pikachu.
+        Optional<PokemonDataDTO> pikachu = PokemonController.getInstance().getPokemonDatabaseByName(pokemonName);
+        if (pikachu.isPresent()) {
+            Utils.print(Utils.SEPARATOR + "\nInformación de " + pokemonName + " desde la base de datos:");
+            Utils.print(pikachu.get().toString());
+        }else{
+            Utils.print(pokemonName +" no se encuentra en la base de datos");
+        }
     }
 
-    private void stringDataToDatabaseAndPrint(Optional<List<PokemonDataDTO>> data) {
-        //        TODO: Introduce los datos que has importado de un CSV en una base de datos en fichero como H2 o SQLite y luego realiza un select para ver el resultado de las operaciones. Los datos de conexión deben estar encapsulados en un manejador y leídos de un fichero de propiedades o de entorno.
+    private void pokemonDataToDatabaseAndSelect(Optional<List<PokemonDataDTO>> data) {
+        if (data.isPresent()){
+            PokemonController.getInstance().insertAllPokemonDataToDatabase(data.get());
+            PokemonController.getInstance().doDatabaseSelect();
+        }else{
+            Utils.print("No se ha podido obtener los datos");
+        }
     }
 
     private void csvExportData() {

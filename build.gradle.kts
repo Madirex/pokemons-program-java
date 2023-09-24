@@ -13,7 +13,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 
-    implementation("com.h2database:h2:2.2.224")
+    implementation("com.h2database:h2:2.1.210")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.opencsv:opencsv:5.8")

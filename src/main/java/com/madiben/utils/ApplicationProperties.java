@@ -21,7 +21,7 @@ public class ApplicationProperties {
     private ApplicationProperties() {
         properties = new Properties();
         try {
-            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
+            properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.ALL,ex,
                     () -> "IOException - Error al leer el fichero de propiedades.");

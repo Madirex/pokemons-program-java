@@ -1,12 +1,10 @@
 package com.madiben.models;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class Pokemon {
@@ -53,7 +51,7 @@ public class Pokemon {
 
     @SerializedName("prev_evolution")
     @NonNull
-    private ArrayList<PrevEvolution> prevEvolution ;
+    private ArrayList<PrevEvolution> prevEvolution;
 
     public Pokemon() {
         this.type = new ArrayList<>();

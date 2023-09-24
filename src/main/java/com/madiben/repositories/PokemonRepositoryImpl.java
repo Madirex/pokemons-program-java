@@ -1,11 +1,14 @@
 package com.madiben.repositories;
 
 import com.madiben.database.DatabaseController;
+import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.Pokemon;
+import com.madiben.utils.StringConverters;
+import com.madiben.utils.Utils;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +17,7 @@ import java.util.Optional;
  */
 public class PokemonRepositoryImpl implements PokemonRepository {
     private final DatabaseController database;
-    
+
     /**
      * Constructor de la clase PokemonRepositoryImpl
      *
@@ -26,84 +29,24 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     }
 
     /**
-     * Busca todos los elementos en el repositorio
+     * [Método deshabilitado]
      *
      * @return Optional de la lista de elementos encontrados
      */
     @Override
-    public Optional<List<Pokemon>> findAll() throws SQLException {
-        String sql = "SELECT * FROM pokemon";
-        database.open();
-        ResultSet res = database.select(sql).orElseThrow(() -> new SQLException("Error al obtener a los pokemons."));
-        var pokemons = new ArrayList<Pokemon>();
-        while (res.next()) {
-//            var pokemon = Pokemon.builder()
-//                    .id(res.getInt("id"))
-//                    .num(res.getString("num"))
-//                    .img(res.getString("img"))
-//                    //.type(res.getType("type")) //TODO: DO
-//                    .height(res.getString("height"))
-//                    .weight(res.getString("weight"))
-//                    .candy(res.getString("candy"))
-//                    .candyCount(res.getInt("candyCount"))
-//                    .egg(res.getString("egg"))
-//                    .spawnChance(res.getDouble("spawnChance"))
-//                    .avgSpawns(res.getDouble("avgSpawns"))
-//                    .spawnTime(res.getString("spawntime"))
-//                    //.multipliers() //TODO: DO
-//                    //.weaknesses() //TODO: DO
-//                    //.nextEvolution() //TODO: DO
-//                    //.prevEvolution() //TODO: DO
-//
-//                    .build();
-//            pokemons.add(pokemon);
-        }
-        database.close();
-        return Optional.of(pokemons);
-
+    public Optional<List<PokemonDataDTO>> findAll() {
+        return Optional.empty();
     }
 
     /**
-     * Busca un elemento en el repositorio
+     * [Método deshabilitado]
      *
      * @param integer Id del elemento a buscar
      * @return Optional del elemento encontrado
      */
-
     @Override
-    public Optional<Pokemon> findById(Integer integer) throws SQLException {
-        String sql = "SELECT * FROM pokemon where id= ?";
-        database.open();
-        ResultSet res = database.select(sql).orElseThrow(() -> new SQLException("Error al obtener las personas."));
-        var pokemons = new ArrayList<>();
-
-        if (res.next()) {
-
-//            var pokemon = Pokemon.builder()
-//                    .id(res.getInt("id"))
-//                    .num(res.getString("num"))
-//                    .img(res.getString("img"))
-//                    //.type(res.getType("type")) //TODO: DO
-//                    .height(res.getString("height"))
-//                    .weight(res.getString("weight"))
-//                    .candy(res.getString("candy"))
-//                    .candyCount(res.getInt("candyCount"))
-//                    .egg(res.getString("egg"))
-//                    .spawnChance(res.getDouble("spawnChance"))
-//                    .avgSpawns(res.getDouble("avgSpawns"))
-//                    .spawnTime(res.getString("spawntime"))
-//                    //.multipliers() //TODO: DO
-//                    //.weaknesses() //TODO: DO
-//                    //.nextEvolution() //TODO: DO
-//                    //.prevEvolution() //TODO: DO
-//                    .build();
-//            pokemons.add(pokemon);
-            database.close();
-//            return Optional.of(pokemon);
-        }
-        database.close();
+    public Optional<PokemonDataDTO> findById(Integer integer) {
         return Optional.empty();
-
     }
 
     /**
@@ -113,78 +56,41 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      * @return Optional del elemento guardado
      */
     @Override
-    public Optional<Pokemon> save(Pokemon entity) throws SQLException {
-        var sql = "INSERT INTO pokemon (id,num,name,img,type,height,weight,candy,candyCount,egg,spawnChance," +
-        "avgSpawns,spawnTime,multipliers,weaknesses,nextEvolution,prevEvolution) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public Optional<PokemonDataDTO> save(PokemonDataDTO entity) throws SQLException {
+        var sql = "INSERT INTO pokemon (num, name, height, weight) VALUES (?, ?, ?, ?)";
         database.open();
-        var res= database.insert(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType()
-                ,entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),
-                entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),
-                entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution())
-                .orElseThrow(() -> new SQLException("Error al insertar el pokemon"));
-        database.close();
-        if(res.next()){
-            return Optional.of(entity);
-        }
-        else {
+        var res = database.insert(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
+                .orElseThrow(() -> new SQLException("Error al insertar el Pokémon"));
+        if (res.next()) {
             database.close();
-            throw new SQLException("Error al insertar el pokemon");
-
+            return Optional.of(entity);
+        } else {
+            database.close();
+            throw new SQLException("Error al insertar el Pokémon");
         }
-
-
     }
 
     /**
-     * Actualiza un elemento del repositorio
+     * [Método deshabilitado]
      *
      * @param integer Id del elemento a actualizar
      * @param entity  Elemento con los nuevos datos
      * @return Optional del elemento actualizado
      */
     @Override
-    public Optional<Pokemon> update(Integer integer, Pokemon entity) throws SQLException {
-        var sql="UPDATE pokemon SET id=?, num=?, name=?, img=?, type=?,height=?,weight=?,candy=?,candyCount=?,egg=?," +
-                "spawnChance=?,avgSpawns=?,spawnTime=?,multipliers=?,weaknesses=?,nextEvolution=?,prevEvolution=? " +
-                "WHERE id=?";
-        database.open();
-        var res= database.update(sql,entity.getId(),entity.getNum(),entity.getName(),entity.getImg(),entity.getType(),
-                entity.getHeight(),entity.getWeight(),entity.getCandy(),entity.getCandyCount(),entity.getEgg(),
-                entity.getSpawnChance(),entity.getAvgSpawns(),entity.getSpawnTime(),entity.getMultipliers(),
-                entity.getWeaknesses(),entity.getNextEvolution(),entity.getPrevEvolution(),integer);
-        if(res >0){
-            database.close();
-            return Optional.of(entity);
-        }
-        else {
-            database.close();
-            throw new SQLException("Error al actualizar el pokemon");
-
-        }
-
+    public Optional<PokemonDataDTO> update(Integer integer, PokemonDataDTO entity) {
+        return Optional.empty();
     }
 
     /**
-     * Borra un elemento del repositorio
+     * [Método deshabilitado]
      *
      * @param integer Id del elemento a borrar
      * @return Optional del elemento borrado
      */
     @Override
-    public Optional<Pokemon> delete(Integer integer) throws SQLException {
-        var pokemon = findById(integer).orElseThrow(() -> new RuntimeException("No se ha encontrado el pokemon"));
-        var sql="DELETE FROM pokemon WHERE id=?";
-        database.open();
-        var res= database.delete(sql,integer);
-        database.close();
-        if(res >0){
-            return Optional.of(pokemon);
-        }
-        else {
-            throw new SQLException("Error al borrar el pokemon");
-
-        }
+    public Optional<PokemonDataDTO> delete(Integer integer) {
+        return Optional.empty();
     }
 
     /**
@@ -194,38 +100,58 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      * @return Optional del elemento encontrado
      */
     @Override
-    public Optional<Pokemon> findByName(String name) throws SQLException {
-        var sql="SELECT * FROM pokemon WHERE name=?";
-        database.open();
-        var pokemons = new ArrayList<>();
-        var res= database.select(sql,name).orElseThrow(() -> new SQLException("Error al obtener el pokemon"));
-        if(res.next()){
-//            var pokemon = Pokemon.builder()
-//                    .id(res.getInt("id"))
-//                    .num(res.getString("num"))
-//                    .img(res.getString("img"))
-//                    //.type(res.getType("type")) //TODO: DO
-//                    .height(res.getString("height"))
-//                    .weight(res.getString("weight"))
-//                    .candy(res.getString("candy"))
-//                    .candyCount(res.getInt("candyCount"))
-//                    .egg(res.getString("egg"))
-//                    .spawnChance(res.getDouble("spawnChance"))
-//                    .avgSpawns(res.getDouble("avgSpawns"))
-//                    .spawnTime(res.getString("spawntime"))
-//                    //.multipliers() //TODO: DO
-//                    //.weaknesses() //TODO: DO
-//                    //.nextEvolution() //TODO: DO
-//                    //.prevEvolution() //TODO: DO
-//
-//                    .build();
-//            pokemons.add(pokemon);
+    public Optional<PokemonDataDTO> findByName(String name) throws SQLException {
+        try {
+            var sql = "SELECT * FROM pokemon WHERE name=?";
+            database.open();
+            var res = database.select(sql, name);
+            if (res.isPresent() && res.get().first()) {
+                return Optional.of(PokemonDataDTO.builder()
+                        .id(res.get().getInt("id"))
+                        .num(res.get().getString("num"))
+                        .name(res.get().getString("name"))
+                        .height(StringConverters.getInstance()
+                                .strPositiveValToDoubleParser(res.get().getString("height")).orElse(0.0))
+                        .weight(StringConverters.getInstance()
+                                .strPositiveValToDoubleParser(res.get().getString("weight")).orElse(0.0))
+                        .build());
+            }
+        } catch (SQLException e) {
+            Utils.print("Error base de datos al buscar el Pokémon");
+        } finally {
             database.close();
-//            return Optional.of(pokemon);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Select que imprime TODOS los datos de la base de datos
+     */
+    @Override
+    public void select() throws SQLException {
+        var sql = "SELECT *";
+
+        database.open();
+        ResultSet rs = database.select(sql).orElseThrow(() -> new SQLException("Error al ejecutar el SELECT"));
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        // Imprimir nombre columnas
+        for (int i = 1; i <= columnCount; i++) {
+            Utils.print(metaData.getColumnName(i) + "\t");
+        }
+
+        Utils.print("\n");
+
+        // Imprimir datos
+        while (rs.next()) {
+            for (int i = 1; i <= columnCount; i++) {
+                Utils.print(rs.getString(i) + "\t");
+            }
+            Utils.print("\n");
         }
         database.close();
-        return Optional.empty();
-
-        }
     }
+}
 
