@@ -7,8 +7,8 @@ import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokemon;
 import com.madiben.utils.Utils;
 
+import java.io.File;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Clase principal del programa
@@ -38,20 +38,23 @@ public class PokemonProgram {
 
     /**
      * Método inicializador del programa
+     * 1. Imprime los datos del programa
+     * 2. Exporta a CSV los datos del programa
+     * 3. Lee los datos del CSV y los printea. Introduce los datos del CSV en una base de datos y hace un select
+     * 4. Imprime los datos de Pikachu haciendo una consulta a la base de datos
      */
     public void init() {
         printConsoleData();
-        csvExportData(); //TODO: comprobar que funcione correctamente
-        //Optional<Stream<PokemonDataDTO>> pokemons = readFileGetPokemonDataDTOAndPrint(""); //TODO: comprobar que funcione correctamente
-        //stringDataToDatabaseAndPrint(pokemons); //TODO: comprobar que funcione correctamente
-        printPokemonDataFromDatabase("Pikachu"); //TODO: comprobar que funcione correctamente
+        csvExportData();
+        stringDataToDatabaseAndPrint(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
+        printPokemonDataFromDatabase("Pikachu");
     }
 
     private void printPokemonDataFromDatabase(String pokemonName) {
         //        TODO: Desde la base de datos, saca la información de Pikachu.
     }
 
-    private void stringDataToDatabaseAndPrint(Optional<Stream<PokemonDataDTO>> data) {
+    private void stringDataToDatabaseAndPrint(Optional<List<PokemonDataDTO>> data) {
         //        TODO: Introduce los datos que has importado de un CSV en una base de datos en fichero como H2 o SQLite y luego realiza un select para ver el resultado de las operaciones. Los datos de conexión deben estar encapsulados en un manejador y leídos de un fichero de propiedades o de entorno.
     }
 
@@ -59,47 +62,42 @@ public class PokemonProgram {
         CsvManager.getInstance().exportPokemonDataToCSV();
     }
 
-    /*private Optional<Stream<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
-        Optional<Stream<PokemonDataDTO>> pokemons = CsvManager.getInstance().fileToPokemonDataDTO(path);
+    private Optional<List<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
+        Optional<List<PokemonDataDTO>> pokemons = CsvManager.getInstance().fileToPokemonDataDTO(path);
         if (pokemons.isPresent()) {
-            pokemons.get().forEach(System.out::println);
+            pokemons.get().forEach(e -> Utils.print(e.toString()));
         } else {
             Utils.print("No se ha podido leer el archivo.");
         }
         return pokemons;
     }
 
-     */
-
-    private String separator(){
-        return "\n----------------------------------------\n";
-    }
     private void printConsoleData() {
         PokemonController pc = PokemonController.getInstance();
-        Utils.print(separator() + "(1) Nombre los 10 primeros Pokémon:\n" + pc.getFirstPokemonNames(10));
-        Utils.print(separator() + "(2) Nombre de los 5 últimos Pokémon:\n" + pc.getLastPokemonNames(5));
-        Utils.print(separator() + "(3) Datos de Pikachu:\n" + getPokemonData(pc.getPokemonByName("Pikachu")));
-        Utils.print(separator() + "(4) Siguiente evolución de Charmander:\n" + getNextEvolutionByName("Charmander"));
-        Utils.print(separator() + "(5) Nombre de los Pokémon de tipo Fire:\n" + pc.getNamesByTypeName("Fire"));
-        Utils.print(separator() + "(6) Pokémon con debilidad Water o Electric:\n" + pc
+        Utils.print(Utils.SEPARATOR + "(1) Nombre los 10 primeros Pokémon:\n" + pc.getFirstPokemonNames(10));
+        Utils.print(Utils.SEPARATOR + "(2) Nombre de los 5 últimos Pokémon:\n" + pc.getLastPokemonNames(5));
+        Utils.print(Utils.SEPARATOR + "(3) Datos de Pikachu:\n" + getPokemonData(pc.getPokemonByName("Pikachu")));
+        Utils.print(Utils.SEPARATOR + "(4) Siguiente evolución de Charmander:\n" + getNextEvolutionByName("Charmander"));
+        Utils.print(Utils.SEPARATOR + "(5) Nombre de los Pokémon de tipo Fire:\n" + pc.getNamesByTypeName("Fire"));
+        Utils.print(Utils.SEPARATOR + "(6) Pokémon con debilidad Water o Electric:\n" + pc
                 .filterByWeaknessesAnyMatch(new ArrayList<>(Arrays.asList("Water", "Electric"))));
-        Utils.print(separator() + "(7) Pokémon con solo una debilidad:\n" + pc.countPokemonsWithANumberOfWeaknesses(1));
-        Utils.print(separator() + "(8) Pokémon con más debilidades:\n" + getPokemonData(pc.getPokemonWithMoreWeaknesses()));
-        Utils.print(separator() + "(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
-        Utils.print(separator() + "(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
+        Utils.print(Utils.SEPARATOR + "(7) Pokémon con solo una debilidad:\n" + pc.countPokemonsWithANumberOfWeaknesses(1));
+        Utils.print(Utils.SEPARATOR + "(8) Pokémon con más debilidades:\n" + getPokemonData(pc.getPokemonWithMoreWeaknesses()));
+        Utils.print(Utils.SEPARATOR + "(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
+        Utils.print(Utils.SEPARATOR + "(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
                 getPokemonData(getFirstPokemonOfList(pc.pokemonListExcludeByEvolution("Fire"))));
-        Utils.print(separator() + "(11) Pokémon más pesado:\n" + getPokemonData(pc.getHighestWeightPokemon()));
-        Utils.print(separator() + "(12) Pokémon más alto:\n" + getPokemonData(pc.getHeighestPokemon()));
-        Utils.print(separator() + "(13) Pokémon con el nombre más largo:\n" + getPokemonData(pc.getPokemonWithLongestName()));
-        Utils.print(separator() + "(14) Media de peso de los Pokémon:\n" + String.format("%.2f",pc.getPokemonWeightAvg()));
-        Utils.print(separator() + "(15) Media de altura de los Pokémon:\n" + String.format("%.2f",pc.getPokemonHeightAvg()));
-        Utils.print(separator() + "(16) Media de evoluciones de los Pokémon:\n" + String.format("%.2f",pc.getPokemonEvolutionAvg()));
-        Utils.print(separator() + "(17) Media de debilidades de los Pokémon:\n" + String.format("%.2f",pc.getPokemonWeaknessesAvg()));
-        printMap(pc.groupPokemonByType(), separator() + "(18) Pokémon agrupados por tipo:\n", "Tipo");
-        printMapLong(pc.groupPokemonByWeaknesses(), separator() + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
-        printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
-        Utils.print(separator() + "(21) Debilidad más común:\n" + (pc.getMostCommonWeakness()));
-        
+        Utils.print(Utils.SEPARATOR + "(11) Pokémon más pesado:\n" + getPokemonData(pc.getHighestWeightPokemon()));
+        Utils.print(Utils.SEPARATOR + "(12) Pokémon más alto:\n" + getPokemonData(pc.getHeighestPokemon()));
+        Utils.print(Utils.SEPARATOR + "(13) Pokémon con el nombre más largo:\n" + getPokemonData(pc.getPokemonWithLongestName()));
+        Utils.print(Utils.SEPARATOR + "(14) Media de peso de los Pokémon:\n" + String.format("%.2f", pc.getPokemonWeightAvg()));
+        Utils.print(Utils.SEPARATOR + "(15) Media de altura de los Pokémon:\n" + String.format("%.2f", pc.getPokemonHeightAvg()));
+        Utils.print(Utils.SEPARATOR + "(16) Media de evoluciones de los Pokémon:\n" + String.format("%.2f", pc.getPokemonEvolutionAvg()));
+        Utils.print(Utils.SEPARATOR + "(17) Media de debilidades de los Pokémon:\n" + String.format("%.2f", pc.getPokemonWeaknessesAvg()));
+        printMap(pc.groupPokemonByType(), Utils.SEPARATOR + "(18) Pokémon agrupados por tipo:\n", "Tipo");
+        printMapLong(pc.groupPokemonByWeaknesses(), Utils.SEPARATOR + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
+        printMap(pc.groupPokemonByEvolutionNumber(), Utils.SEPARATOR + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
+        Utils.print(Utils.SEPARATOR + "(21) Debilidad más común:\n" + (pc.getMostCommonWeakness()));
+
     }
 
     /**
@@ -148,16 +146,16 @@ public class PokemonProgram {
     /**
      * Imprime un mapa de tipo <T, List<Pokemon>>
      *
-     * @param map Mapa a imprimir
-     * @param title Título del mapa
+     * @param map        Mapa a imprimir
+     * @param title      Título del mapa
      * @param mapKeyName Nombre de la clave del mapa
-     * @param <T> Tipo de la clave del mapa
+     * @param <T>        Tipo de la clave del mapa
      */
-    private <T> void printMap(Map<T, List<Pokemon>> map, String title, String mapKeyName){
+    private <T> void printMap(Map<T, List<Pokemon>> map, String title, String mapKeyName) {
         Utils.print(title);
         map.forEach((type, pokemonList) -> {
             Utils.print("\n" + mapKeyName + ": " + type);
-            if (!pokemonList.isEmpty()){
+            if (!pokemonList.isEmpty()) {
                 for (int i = 0; i < pokemonList.size(); i++) {
                     Utils.print("\t(" + (i + 1) + ") Nombre: " + pokemonList.get(i).getName());
                 }
@@ -168,12 +166,12 @@ public class PokemonProgram {
     /**
      * Imprime un mapa de tipo <T, Long>
      *
-     * @param map Mapa a imprimir
-     * @param title Título del mapa
+     * @param map        Mapa a imprimir
+     * @param title      Título del mapa
      * @param mapKeyName Nombre de la clave del mapa
-     * @param <T> Tipo de la clave del mapa
+     * @param <T>        Tipo de la clave del mapa
      */
-    private <T> void printMapLong(Map<T, Long> map, String title, String mapKeyName){
+    private <T> void printMapLong(Map<T, Long> map, String title, String mapKeyName) {
         Utils.print(title);
         map.forEach((type, amount) -> {
             Utils.print("\n" + mapKeyName + ": " + type);

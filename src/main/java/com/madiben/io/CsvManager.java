@@ -1,28 +1,38 @@
 package com.madiben.io;
 
+import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.Pokemon;
 import com.madiben.controller.PokemonController;
+import com.madiben.utils.StringConverters;
 import com.madiben.utils.Utils;
 import com.opencsv.CSVWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+/**
+ * Clase CsvManager que administra la exportación e importación de datos CSV
+ */
 public class CsvManager {
 
     private static CsvManager csvManagerInstance;
 
+    /**
+     * Constructor privado para evitar instanciación
+     * SINGLETON
+     */
     private CsvManager() {
     }
 
     /**
      * Obtiene la instancia de CsvManager
-     *
+     * SINGLETON
      * @return Instancia de CsvManager
      */
     public static CsvManager getInstance() {
@@ -30,6 +40,28 @@ public class CsvManager {
             csvManagerInstance = new CsvManager();
         }
         return csvManagerInstance;
+    }
+
+    /**
+     * Lee un archivo CSV y lo convierte en un Optional de la lista de PokemonDataDTO
+     * @param path Ruta del archivo CSV
+     * @return Optional de la lista de PokemonDataDTO
+     */
+    public Optional<List<PokemonDataDTO>> fileToPokemonDataDTO(String path) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            return Optional.of(reader.lines()
+                    .map(line -> line.split(","))
+                    .map(values -> PokemonDataDTO.builder()
+                            .num(values[1])
+                            .name(values[2])
+                            .height(StringConverters.getInstance().strPositiveValToDoubleParser(values[3]).orElse(0.0))
+                            .weight(StringConverters.getInstance().strPositiveValToDoubleParser(values[4]).orElse(0.0))
+                                    .build())
+                    .collect(Collectors.toList()));
+        } catch (IOException e) {
+            Utils.print("Error al leer el archivo CSV");
+        }
+        return Optional.empty();
     }
 
     /**
