@@ -14,4 +14,8 @@ public class NextEvolution {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    public String getName() {
+        return name;
+    }
 }
