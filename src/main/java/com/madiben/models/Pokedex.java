@@ -1,15 +1,10 @@
 package com.madiben.models;
 
-import lombok.Data;
+import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-//@Data
+@Getter
 public class Pokedex {
     private List<Pokemon> pokemon;
-
-    public List<Pokemon> getPokemon() {
-        return pokemon;
-    }
 }

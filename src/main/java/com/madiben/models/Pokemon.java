@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-//@Builder
 public class Pokemon {
     private int id;
 
@@ -48,11 +48,20 @@ public class Pokemon {
     private ArrayList<String> weaknesses;
 
     @SerializedName("next_evolution")
+    @NonNull
     private ArrayList<NextEvolution> nextEvolution;
 
     @SerializedName("prev_evolution")
     @NonNull
-    private ArrayList<PrevEvolution> prevEvolution;
+    private ArrayList<PrevEvolution> prevEvolution ;
+
+    public Pokemon() {
+        this.type = new ArrayList<>();
+        this.multipliers = new ArrayList<>();
+        this.weaknesses = new ArrayList<>();
+        this.nextEvolution = new ArrayList<>();
+        this.prevEvolution = new ArrayList<>();
+    }
 
     @Override
     public String toString() {

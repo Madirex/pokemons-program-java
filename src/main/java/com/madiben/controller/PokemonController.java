@@ -47,7 +47,9 @@ public class PokemonController {
     }
 
     public void loadPokedex() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
         // Actualizar a try-with-resources
         try (Reader reader = new FileReader(loadResource("pokemon.json"))) {
@@ -58,19 +60,32 @@ public class PokemonController {
         }
     }
 
-    public void test(){
-        //Agrupar por tipo
-        Map<String, List<Pokemon>> pokeAgrupTip = groupPokemonByType();
-        //Agrupar por numero de evoluciones
-        Map<Integer, List<Pokemon>> pokeAgrupEv = pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getNextEvolution().size()));
-        //Agrupar por debilidades
-        Map<String, List<Pokemon>> pokeAgrupWeak = pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getWeaknesses().toString()));
-        //Debilidad mas comun
+    @NotNull
+    private Map<String, List<Pokemon>> groupPokemonByWeaknesses() {
+        return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getWeaknesses().toString()));
+        //TODO: FIX
     }
 
     @NotNull
-    private Map<String, List<Pokemon>> groupPokemonByType() {
-        return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
+    public Map<Integer, List<Pokemon>> groupPokemonByEvolutionNumber() {
+        return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getNextEvolution().size()));
+    }
+
+    @NotNull
+    public Map<String, List<Pokemon>> groupPokemonByType() {
+       return pokedex.getPokemon().stream().collect(Collectors.groupingBy(pokemon -> pokemon.getType().toString()));
+       //TODO: FIX
+//        Stream<String> types = pokedex.getPokemon()
+//                .stream()
+//                .distinct()
+//                .flatMap(pokemon -> pokemon.getType().stream()); //uno a muchos
+//
+//        return types.collect(Collectors.groupingBy(
+//                type -> type,
+//                type -> pokedex.getPokemon().stream()
+//                        .filter(pokemon -> pokemon.getType().contains(type))
+//                        .collect(Collectors.toList()))
+//        );
     }
 
     public double getPokemonWeaknessesAvg() {

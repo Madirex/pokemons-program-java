@@ -70,40 +70,34 @@ public class PokemonProgram {
         return pokemons;
     }
 
+    private String separator(){
+        return "\n----------------------------------------\n";
+    }
     private void printConsoleData() {
         PokemonController pc = PokemonController.getInstance();
-        Utils.print("\n(1) Nombre los 10 primeros Pokémon:\n" + pc.getFirstPokemonNames(10));
-        Utils.print("\n(2) Nombre de los 5 últimos Pokémon:\n" + pc.getLastPokemonNames(5));
-        Utils.print("\n(3) Datos de Pikachu:\n" + getPokemonData(pc.getPokemonByName("Pikachu")));
-        Utils.print("\n(4) Siguiente evolución de Charmander:\n" + getNextEvolutionByName("Charmander"));
-        Utils.print("\n(5) Nombre de los Pokémon de tipo Fire:\n" + pc.getNamesByTypeName("Fire"));
-        Utils.print("\n(6) Pokémon con debilidad Water o Electric:\n" + pc
+        Utils.print(separator() + "(1) Nombre los 10 primeros Pokémon:\n" + pc.getFirstPokemonNames(10));
+        Utils.print(separator() + "(2) Nombre de los 5 últimos Pokémon:\n" + pc.getLastPokemonNames(5));
+        Utils.print(separator() + "(3) Datos de Pikachu:\n" + getPokemonData(pc.getPokemonByName("Pikachu")));
+        Utils.print(separator() + "(4) Siguiente evolución de Charmander:\n" + getNextEvolutionByName("Charmander"));
+        Utils.print(separator() + "(5) Nombre de los Pokémon de tipo Fire:\n" + pc.getNamesByTypeName("Fire"));
+        Utils.print(separator() + "(6) Pokémon con debilidad Water o Electric:\n" + pc
                 .filterByWeaknessesAnyMatch(new ArrayList<>(Arrays.asList("Water", "Electric"))));
-        Utils.print("\n(7) Pokémon con solo una debilidad:\n" + pc.countPokemonsWithANumberOfWeaknesses(1));
-        Utils.print("\n(8) Pokémon con más debilidades:\n" + getPokemonData(pc.getPokemonWithMoreWeaknesses()));
-        Utils.print("\n(11) Pokémon más pesado:\n" + getPokemonData(pc.getHighestWeightPokemon()));
-        Utils.print("\n(12) Pokémon más alto:\n" + getPokemonData(pc.getHeighestPokemon()));
-        Utils.print("\n(13) Pokémon con el nombre más largo:\n" + getPokemonData(pc.getPokemonWithLongestName()));
-//        TODO: TESTEAR QUE LOS DATOS OBTENIDOS DE ABAJO SON CORRECTOS
-        // TODO: Utils.print("\n(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
-        // TODO: Utils.print("\n(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
-        //       getPokemonData(getFirstPokemonOfList(pc.pokemonListExcludeByEvolution("Fire"))));
-        Utils.print("\n(14) Media de peso de los Pokémon:\n" + pc.getPokemonWeightAvg());
-        Utils.print("\n(15) Media de altura de los Pokémon:\n" + pc.getPokemonHeightAvg());
-        //TODO: Utils.print("\n(16) Media de evoluciones de los Pokémon:\n" + pc.getPokemonEvolutionAvg());
-        //TODO: Utils.print("\n(17) Media de debilidades de los Pokémon:\n" + pc.getPokemonWeaknessesAvg());
-        //printMap
-//        TODO: Pokemons agrupados por tipo.
-//        TODO: Numero de pokemons agrupados por debilidad.
-//        TODO: Pokemons agrupados por número de evoluciones.
-//        TODO: Sacar la debilidad más común.
-
-
-
-
-
-
-
+        Utils.print(separator() + "(7) Pokémon con solo una debilidad:\n" + pc.countPokemonsWithANumberOfWeaknesses(1));
+        Utils.print(separator() + "(8) Pokémon con más debilidades:\n" + getPokemonData(pc.getPokemonWithMoreWeaknesses()));
+        Utils.print(separator() + "(9) Pokémon con menos evoluciones:\n" + getPokemonData(pc.getPokemonWithFewerWeaknesses()));
+        Utils.print(separator() + "(10) Pokémon con 1 evolución que no es de tipo Fire:\n" +
+                getPokemonData(getFirstPokemonOfList(pc.pokemonListExcludeByEvolution("Fire"))));
+        Utils.print(separator() + "(11) Pokémon más pesado:\n" + getPokemonData(pc.getHighestWeightPokemon()));
+        Utils.print(separator() + "(12) Pokémon más alto:\n" + getPokemonData(pc.getHeighestPokemon()));
+        Utils.print(separator() + "(13) Pokémon con el nombre más largo:\n" + getPokemonData(pc.getPokemonWithLongestName()));
+        Utils.print(separator() + "(14) Media de peso de los Pokémon:\n" + String.format("%.2f",pc.getPokemonWeightAvg()));
+        Utils.print(separator() + "(15) Media de altura de los Pokémon:\n" + String.format("%.2f",pc.getPokemonHeightAvg()));
+        Utils.print(separator() + "(16) Media de evoluciones de los Pokémon:\n" + String.format("%.2f",pc.getPokemonEvolutionAvg()));
+        Utils.print(separator() + "(17) Media de debilidades de los Pokémon:\n" + String.format("%.2f",pc.getPokemonWeaknessesAvg()));
+        printMap(pc.groupPokemonByType(), separator() + "(18) Pokémon agrupados por tipo:\n", "Tipo"); //TODO: FIX
+        printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad"); //TODO: FIX - es números. O sea, cantidad
+        printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
+        //TODO: Sacar la debilidad más común.
     }
 
     /**
@@ -150,17 +144,21 @@ public class PokemonProgram {
     }
 
     /**
-     * Imprime el mapa de tipos de Pokémon
+     * Imprime un mapa de tipo <T, List<Pokemon>>
      *
-     * @param map Mapa de tipos de Pokémon
+     * @param map Mapa a imprimir
+     * @param title Título del mapa
+     * @param mapKeyName Nombre de la clave del mapa
+     * @param <T> Tipo de la clave del mapa
      */
-    private void printMap(Map<String, List<Pokemon>> map){
+    private <T> void printMap(Map<T, List<Pokemon>> map, String title, String mapKeyName){
+        Utils.print(title);
         map.forEach((type, pokemonList) -> {
-            Utils.print("\nTipo: " + type);
+            Utils.print("\n" + mapKeyName + ": " + type);
 
             if (!pokemonList.isEmpty()) {
                 for (int i = 0; i < pokemonList.size(); i++) {
-                    Utils.print("\t(" + i + ") Nombre: " + pokemonList.get(i).getName());
+                    Utils.print("\t(" + (i + 1) + ") Nombre: " + pokemonList.get(i).getName());
                 }
             }
         });
