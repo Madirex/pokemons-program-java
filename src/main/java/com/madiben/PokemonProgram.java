@@ -57,8 +57,6 @@ public class PokemonProgram {
 
     private void csvExportData() {
         CsvManager.getInstance().exportPokemonDataToCSV();
-
-
     }
 
     /*private Optional<Stream<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
