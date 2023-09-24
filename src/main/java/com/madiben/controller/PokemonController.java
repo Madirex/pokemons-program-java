@@ -46,6 +46,10 @@ public class PokemonController {
         }
     }
 
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
     public void loadPokedex() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
