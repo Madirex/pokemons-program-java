@@ -100,8 +100,8 @@ public class PokemonProgram {
         printMap(pc.groupPokemonByType(), separator() + "(18) Pokémon agrupados por tipo:\n", "Tipo");
         printMapLong(pc.groupPokemonByWeaknesses(), separator() + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
         printMap(pc.groupPokemonByEvolutionNumber(), separator() + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
-
-        //TODO: Sacar la debilidad más común.
+        Utils.print(separator() + "(21) Debilidad más común:\n" + (pc.getMostCommonWeakness()));
+        
     }
 
     /**
