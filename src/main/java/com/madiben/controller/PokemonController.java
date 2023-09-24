@@ -76,6 +76,18 @@ public class PokemonController {
                                 .filter(pokemon -> pokemon.getWeaknesses().contains(weakness)).count())
                 );
     }
+    public String getMostCommonWeakness(){
+        Map<String, Long> weaknessFrequency = pokedex.getPokemon().stream()
+                .flatMap(pokemon -> pokemon.getWeaknesses().stream())
+                .collect(Collectors.groupingBy(
+                        weakness -> weakness,
+                        Collectors.counting()
+                ));
+        return weaknessFrequency.entrySet().stream()
+                .max(Comparator.comparingLong(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .orElseGet(() -> "No hay debilidades") ;
+    }
 
 
     @NotNull
