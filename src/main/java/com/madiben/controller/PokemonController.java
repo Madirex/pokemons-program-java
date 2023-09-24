@@ -46,6 +46,10 @@ public class PokemonController {
         }
     }
 
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
     public void loadPokedex() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -57,6 +61,7 @@ public class PokemonController {
             System.out.println("Error cargando la Pokédex!\n" + e.getMessage());
         }
     }
+
 
     public void test(){
         //Agrupar por tipo

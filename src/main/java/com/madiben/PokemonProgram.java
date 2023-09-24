@@ -42,8 +42,8 @@ public class PokemonProgram {
     public void init() {
         printConsoleData();
         csvExportData(); //TODO: comprobar que funcione correctamente
-        Optional<Stream<PokemonDataDTO>> pokemons = readFileGetPokemonDataDTOAndPrint(""); //TODO: comprobar que funcione correctamente
-        stringDataToDatabaseAndPrint(pokemons); //TODO: comprobar que funcione correctamente
+        //Optional<Stream<PokemonDataDTO>> pokemons = readFileGetPokemonDataDTOAndPrint(""); //TODO: comprobar que funcione correctamente
+        //stringDataToDatabaseAndPrint(pokemons); //TODO: comprobar que funcione correctamente
         printPokemonDataFromDatabase("Pikachu"); //TODO: comprobar que funcione correctamente
     }
 
@@ -56,11 +56,12 @@ public class PokemonProgram {
     }
 
     private void csvExportData() {
-                String rutaDelArchivo = "/ruta/al/archivo.csv";
-        //        TODO: Exporta a csv los siguientes datos de pokemons: id, num, name, height, width.
+        CsvManager.getInstance().exportPokemonDataToCSV();
+
+
     }
 
-    private Optional<Stream<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
+    /*private Optional<Stream<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
         Optional<Stream<PokemonDataDTO>> pokemons = CsvManager.getInstance().fileToPokemonDataDTO(path);
         if (pokemons.isPresent()) {
             pokemons.get().forEach(System.out::println);
@@ -69,6 +70,9 @@ public class PokemonProgram {
         }
         return pokemons;
     }
+
+         */
+
 
     private void printConsoleData() {
         PokemonController pc = PokemonController.getInstance();
@@ -97,11 +101,6 @@ public class PokemonProgram {
 //        TODO: Numero de pokemons agrupados por debilidad.
 //        TODO: Pokemons agrupados por número de evoluciones.
 //        TODO: Sacar la debilidad más común.
-
-
-
-
-
 
 
     }
@@ -141,10 +140,10 @@ public class PokemonProgram {
      * @param pokeList Lista de Pokémon
      * @return Optional con el primer Pokémon de la lista o un Optional vacío si la lista está vacía
      */
-    private Optional<Pokemon> getFirstPokemonOfList(List<Pokemon> pokeList){
-        if(!pokeList.isEmpty()){
+    private Optional<Pokemon> getFirstPokemonOfList(List<Pokemon> pokeList) {
+        if (!pokeList.isEmpty()) {
             return Optional.of(pokeList.get(0));
-        }else{
+        } else {
             return Optional.empty();
         }
     }
@@ -154,7 +153,7 @@ public class PokemonProgram {
      *
      * @param map Mapa de tipos de Pokémon
      */
-    private void printMap(Map<String, List<Pokemon>> map){
+    private void printMap(Map<String, List<Pokemon>> map) {
         map.forEach((type, pokemonList) -> {
             Utils.print("\nTipo: " + type);
 
