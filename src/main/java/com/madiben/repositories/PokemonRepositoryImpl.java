@@ -1,11 +1,12 @@
 package com.madiben.repositories;
 
-import com.madiben.database.DatabaseController;
+import com.madiben.database.DatabaseManager;
 import com.madiben.dto.PokemonDataDTO;
-import com.madiben.models.Pokemon;
 import com.madiben.utils.StringConverters;
 import com.madiben.utils.Utils;
+import lombok.RequiredArgsConstructor;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -15,18 +16,9 @@ import java.util.Optional;
 /**
  * Implementación de la interfaz PokemonRepository
  */
+@RequiredArgsConstructor
 public class PokemonRepositoryImpl implements PokemonRepository {
-    private final DatabaseController database;
-
-    /**
-     * Constructor de la clase PokemonRepositoryImpl
-     *
-     * @param database Instancia de la clase DatabaseController
-     */
-
-    public PokemonRepositoryImpl(DatabaseController database) {
-        this.database = database;
-    }
+    private final DatabaseManager database;
 
     /**
      * [Método deshabilitado]
@@ -57,17 +49,24 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      */
     @Override
     public Optional<PokemonDataDTO> save(PokemonDataDTO entity) throws SQLException {
+        Optional<PokemonDataDTO> objReturn = Optional.empty();
         var sql = "INSERT INTO pokemon (num, name, height, weight) VALUES (?, ?, ?, ?)";
         database.open();
-        var res = database.insert(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
+        PreparedStatement res = database.insertNumericKey(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
                 .orElseThrow(() -> new SQLException("Error al insertar el Pokémon"));
-        if (res.next()) {
-            database.close();
-            return Optional.of(entity);
-        } else {
-            database.close();
-            throw new SQLException("Error al insertar el Pokémon");
-        }
+        objReturn = Optional.of(entity);
+            int n = res.executeUpdate();
+            if (n > 0){
+                ResultSet rs = res.getGeneratedKeys();
+                while (rs.next()){
+                    objReturn.get().setId(rs.getInt(1));
+                }
+                rs.close();
+                database.close();
+            }else{
+                throw new SQLException("Error al insertar el Pokémon");
+            }
+        return objReturn;
     }
 
     /**
@@ -102,7 +101,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     @Override
     public Optional<PokemonDataDTO> findByName(String name) throws SQLException {
         try {
-            var sql = "SELECT * FROM pokemon WHERE name=?";
+            var sql = "SELECT * FROM pokemon WHERE name LIKE ?";
             database.open();
             var res = database.select(sql, name);
             if (res.isPresent() && res.get().first()) {

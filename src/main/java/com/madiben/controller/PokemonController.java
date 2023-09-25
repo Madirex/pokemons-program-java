@@ -4,7 +4,7 @@ package com.madiben.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.madiben.database.DatabaseController;
+import com.madiben.database.DatabaseManager;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokedex;
@@ -30,7 +30,7 @@ public class PokemonController {
 
     @Getter
     private Pokedex pokedex;
-    private PokemonRepositoryImpl pokemonRepository = new PokemonRepositoryImpl(DatabaseController.getInstance());
+    private PokemonRepositoryImpl pokemonRepository = new PokemonRepositoryImpl(DatabaseManager.getInstance());
 
     private PokemonController() {
     }

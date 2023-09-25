@@ -13,8 +13,8 @@ import java.util.Optional;
 /**
  * Controlador de Bases de Datos
  */
-public class DatabaseController {
-    private static DatabaseController controller;
+public class DatabaseManager {
+    private static DatabaseManager controller;
     @NonNull
     private String serverUrl;
     @NonNull
@@ -37,7 +37,7 @@ public class DatabaseController {
     /**
      * Constructor privado para Singleton
      */
-    private DatabaseController() {
+    private DatabaseManager() {
         initConfig();
     }
 
@@ -45,9 +45,9 @@ public class DatabaseController {
      * Devuelve una instancia del controlador
      * @return instancia del controladorBD
      */
-    public static DatabaseController getInstance() {
+    public static DatabaseManager getInstance() {
         if (controller == null) {
-            controller = new DatabaseController();
+            controller = new DatabaseManager();
         }
         return controller;
     }
@@ -162,6 +162,21 @@ public class DatabaseController {
         }
         preparedStatement.executeUpdate();
         return Optional.of(preparedStatement.getGeneratedKeys());
+    }
+
+    /**
+     * Realiza una consulta de tipo insert de manera "preparada" con los parámetros opcionales si son necesarios
+     * @param insertSQL consulta SQL de tipo insert
+     * @param params parámetros de la consulta parametrizada
+     * @return PreparedStatement de la consulta
+     * @throws SQLException tabla no existe o no se ha podido realizar la operación
+     */
+    public Optional<PreparedStatement> insertNumericKey(@NonNull String insertSQL, Object... params) throws SQLException {
+        preparedStatement = connection.prepareStatement(insertSQL, preparedStatement.RETURN_GENERATED_KEYS);
+        for (int i = 0; i < params.length; i++) {
+            preparedStatement.setObject(i + 1, params[i]);
+        }
+        return Optional.of(preparedStatement);
     }
 
     /**
