@@ -4,14 +4,18 @@ package com.madiben.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.madiben.services.io.database.DatabaseManager;
 import com.madiben.dto.PokemonDataDTO;
+import com.madiben.exceptions.FileNotFoundException;
+import com.madiben.exceptions.pokedex.PokedexLoadException;
+import com.madiben.exceptions.pokemon.PokemonFindAllException;
+import com.madiben.exceptions.pokemon.PokemonGetPokemonByNameException;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokedex;
 import com.madiben.models.Pokemon;
 import com.madiben.repositories.PokemonRepositoryImpl;
-import com.madiben.services.utils.StringConverters;
-import com.madiben.services.utils.Utils;
+import com.madiben.services.database.DatabaseManager;
+import com.madiben.utils.StringConverters;
+import com.madiben.utils.LogGeneral;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +37,7 @@ public class PokemonController {
 
     @Getter
     private Pokedex pokedex;
-    private PokemonRepositoryImpl pokemonRepository = new PokemonRepositoryImpl(DatabaseManager.getInstance());
+    private final PokemonRepositoryImpl pokemonRepository = new PokemonRepositoryImpl(DatabaseManager.getInstance());
 
     /**
      * Constructor privado para evitar la creación de la instancia
@@ -65,13 +69,15 @@ public class PokemonController {
             try {
                 pokemonRepository.save(e);
             } catch (SQLException throwables) {
-                System.out.println(throwables);
+                LogGeneral.getInstance().error(throwables.getMessage(),
+                        PokemonController.class);
                 failed.set(true);
             }
         });
 
         if (failed.get()) {
-            Utils.print("Error al insertar los datos en la base de datos");
+            LogGeneral.getInstance().error("Error al insertar los datos en la base de datos",
+                    PokemonController.class);
         }
     }
 
@@ -85,7 +91,7 @@ public class PokemonController {
         try {
             return pokemonRepository.findAll();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PokemonFindAllException(e.getMessage());
         }
     }
 
@@ -100,7 +106,7 @@ public class PokemonController {
         try {
             return pokemonRepository.findByName(name);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PokemonGetPokemonByNameException(e.getMessage());
         }
     }
 
@@ -114,12 +120,12 @@ public class PokemonController {
         URL resource = getClass().getClassLoader().getResource("data" + File.separator + resourceName);
         try {
             if (resource == null) {
-                throw new IllegalArgumentException("¡Archivo no encontrado!");
+                throw new FileNotFoundException("¡Archivo no encontrado!");
             } else {
                 return new File(resource.toURI());
             }
         } catch (URISyntaxException e) {
-            throw new RuntimeException("¡Archivo no encontrado!");
+            throw new FileNotFoundException("¡Archivo no encontrado!");
         }
     }
 
@@ -135,7 +141,7 @@ public class PokemonController {
             this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>() {
             }.getType());
         } catch (Exception e) {
-            System.out.println("Error cargando la Pokédex!\n" + e.getMessage()); //TODO: DO REPLACE
+            throw new PokedexLoadException(e.getMessage());
         }
     }
 
@@ -198,7 +204,7 @@ public class PokemonController {
                         type -> type,
                         type -> pokedex.getPokemon().stream()
                                 .filter(pokemon -> pokemon.getType().contains(type))
-                                .collect(Collectors.toList())
+                                .toList()
                 ));
     }
 

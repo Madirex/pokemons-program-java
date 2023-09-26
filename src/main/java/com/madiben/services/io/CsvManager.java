@@ -3,8 +3,8 @@ package com.madiben.services.io;
 import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.Pokemon;
-import com.madiben.services.utils.StringConverters;
-import com.madiben.services.utils.Utils;
+import com.madiben.utils.LogGeneral;
+import com.madiben.utils.StringConverters;
 import com.opencsv.CSVWriter;
 
 import java.io.*;
@@ -59,7 +59,7 @@ public class CsvManager {
                     )
                     .toList());
         } catch (IOException e) {
-            Utils.print("Error al leer el archivo CSV");
+            LogGeneral.getInstance().error("Error al leer el archivo CSV", CsvManager.class);
         }
         return Optional.empty();
     }
@@ -84,9 +84,10 @@ public class CsvManager {
                 };
                 writer.writeNext(rowData);
             }
-            Utils.print("Datos de Pokémon exportados correctamente a pokemon_data.csv");
+            LogGeneral.getInstance().info("Datos de Pokémon exportados correctamente a pokemon_data.csv");
         } catch (IOException e) {
-            Utils.print("Error al exportar los datos de Pokémon a pokemon_data.csv");
+            LogGeneral.getInstance().error("Error al exportar los datos de Pokémon a pokemon_data.csv",
+                    CsvManager.class);
         }
     }
 
@@ -100,7 +101,7 @@ public class CsvManager {
                 Files.createDirectories(folderPath);
             }
         } catch (IOException e) {
-            Utils.print("Error al intentar crear la carpeta out");
+            LogGeneral.getInstance().error("Error al intentar crear la carpeta out", CsvManager.class);
         }
     }
 }

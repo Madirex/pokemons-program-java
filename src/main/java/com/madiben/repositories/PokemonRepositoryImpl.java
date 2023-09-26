@@ -1,8 +1,8 @@
 package com.madiben.repositories;
 
-import com.madiben.services.io.database.DatabaseManager;
+import com.madiben.services.database.DatabaseManager;
 import com.madiben.dto.PokemonDataDTO;
-import com.madiben.services.utils.StringConverters;
+import com.madiben.utils.StringConverters;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.SQLException;

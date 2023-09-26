@@ -1,4 +1,4 @@
-package com.madiben.services.utils;
+package com.madiben.utils;
 
 import java.io.IOException;
 import java.util.Properties;

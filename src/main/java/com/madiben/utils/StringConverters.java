@@ -1,4 +1,4 @@
-package com.madiben.services.utils;
+package com.madiben.utils;
 
 import java.util.Optional;
 
