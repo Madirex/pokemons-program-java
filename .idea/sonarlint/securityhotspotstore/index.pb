@@ -11,8 +11,6 @@ j
 e
 5src/main/java/com/madiben/utils/StringConverters.java,8\2\82b10b5993e4f5b28f045b721f444300db260961
 j
-:src/main/java/com/madiben/database/DatabaseController.java,7\8\789b4a320dd0d8abd0c0c0d405c9494a18385998
-j
 :src/main/java/com/madiben/repositories/CRUDRepository.java,6\c\6cd760f8ea0c3b61969e2f6934070b8493401e69
 m
 =src/main/java/com/madiben/repositories/PokemonRepository.java,a\b\ab026fdb3e5de58a7d9ecfe099842367e112fadb
@@ -38,3 +36,7 @@ c
 -src/main/java/com/madiben/models/Pokemon.java,4\e\4e4dae3baa2da7d829f395d222aa1148a2c4251c
 c
 3src/main/java/com/madiben/models/PrevEvolution.java,3\1\31597f8f8ab915250577c28abe1d4e47ada43f16
+g
+7src/main/java/com/madiben/database/DatabaseManager.java,e\3\e3f7ff9bc6b5a16f1d31dd4ad002c9842f99a4bf
+]
+-src/main/java/com/madiben/PokemonProgram.java,f\6\f696305181cb2b7429c951b8e9d24241945affa0

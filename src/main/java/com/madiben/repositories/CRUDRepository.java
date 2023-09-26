@@ -1,5 +1,7 @@
 package com.madiben.repositories;
 
+import com.madiben.dto.PokemonDataDTO;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +16,9 @@ public interface CRUDRepository<T, ID> {
     /**
      * Devuelve todos los elementos del repositorio
      *
-     * @return Optional de la lista de elementos
+     * @return Lista de elementos
      */
-    Optional<List<T>> findAll() throws SQLException;
+    List<T> findAll() throws SQLException;
 
     /**
      * Devuelve un elemento del repositorio

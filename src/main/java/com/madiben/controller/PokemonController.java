@@ -66,7 +66,7 @@ public class PokemonController {
         }
     }
 
-    public Optional<PokemonDataDTO> getPokemonDatabaseByName(String name) {
+    public List<PokemonDataDTO> getPokemonDatabaseByName(String name) {
         try {
             return pokemonRepository.findByName(name);
         } catch (SQLException e) {

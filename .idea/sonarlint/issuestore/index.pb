@@ -16,8 +16,6 @@ j
 :src/main/java/com/madiben/repositories/CRUDRepository.java,6\c\6cd760f8ea0c3b61969e2f6934070b8493401e69
 m
 =src/main/java/com/madiben/repositories/PokemonRepository.java,a\b\ab026fdb3e5de58a7d9ecfe099842367e112fadb
-j
-:src/main/java/com/madiben/database/DatabaseController.java,7\8\789b4a320dd0d8abd0c0c0d405c9494a18385998
 a
 1src/main/java/com/madiben/dto/PokemonDataDTO.java,3\6\365ad60ea9bf7f1043571a08b8b0461b250af118
 S
@@ -38,3 +36,7 @@ c
 gradlew.bat,2\a\2a45a911a8f1836b0b6c5b758962572012d8f8c3
 k
 ;src/main/java/com/madiben/controller/PokemonController.java,8\7\8774648697fa93fb0e66d0cf0088ca0ac0852ac3
+]
+-src/main/java/com/madiben/PokemonProgram.java,f\6\f696305181cb2b7429c951b8e9d24241945affa0
+g
+7src/main/java/com/madiben/database/DatabaseManager.java,e\3\e3f7ff9bc6b5a16f1d31dd4ad002c9842f99a4bf

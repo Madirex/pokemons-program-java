@@ -35,25 +35,22 @@ public class StringConverters {
      * @return Optional de double
      */
     public Optional<Double> strPositiveValToDoubleParser(String str) {
-        boolean isPostDecimalPoint = false;
-        double convertedNum = 0;
+        StringBuilder strToParse = new StringBuilder();
+        double convertedNum = 0.0;
 
         if (str == null) {
             return Optional.empty();
         }
-
         for(int i = 0; i < str.length(); i++){
-            if (str.charAt(i) == '.'){
-                isPostDecimalPoint = true;
-            } else if (!charIsNumber(str.charAt(i))){
-                if (convertedNum > 0){
-                    return Optional.of(convertedNum);
-                }else{
-                    return Optional.empty();
-                }
-            } else {
-                convertedNum = characterInsertToDouble(isPostDecimalPoint, convertedNum, str.charAt(i));
+            if (str.charAt(i) == '.' || charIsNumber(str.charAt(i))){
+                strToParse.append(str.charAt(i));
             }
+        }
+
+        if (!strToParse.isEmpty()){
+            convertedNum = Double.parseDouble(strToParse.toString());
+        }else{
+            return Optional.empty();
         }
 
         return Optional.of(convertedNum);
@@ -104,5 +101,19 @@ public class StringConverters {
             pokemonName.append(name.charAt(i));
         }
         return pokemonName.toString();
+    }
+
+    /**
+     * Este método convierte el número de un Pokémon a su ID
+     * @param num Número del Pokémon
+     * @return ID del Pokémon
+     */
+    public long convertPokemonNumToPokemonId(String num) {
+        System.out.println(num);
+        while (num.charAt(0) == '0') {
+            num = num.substring(1);
+        }
+        System.out.println(num);
+        return Long.parseLong(num);
     }
 }

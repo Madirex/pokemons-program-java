@@ -44,7 +44,7 @@ public class ApplicationProperties {
      * @param keyName Nombre de la clave
      * @return Valor de la clave
      */
-    public String readProperty(String keyName) {
-        return properties.getProperty(keyName, "No existe esa clave en el fichero de propiedades");
+    public String readProperty(String keyName, String ifNotExistStr) {
+        return properties.getProperty(keyName, ifNotExistStr);
     }
 }

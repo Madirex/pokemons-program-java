@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Clase CsvManager que administra la exportación e importación de datos CSV
@@ -51,12 +50,14 @@ public class CsvManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             return Optional.of(reader.lines()
                     .map(line -> line.split(","))
+                    .skip(1)
                     .map(values -> PokemonDataDTO.builder()
-                            .num(values[1])
-                            .name(values[2])
-                            .height(StringConverters.getInstance().strPositiveValToDoubleParser(values[3]).orElse(0.0))
-                            .weight(StringConverters.getInstance().strPositiveValToDoubleParser(values[4]).orElse(0.0))
-                                    .build())
+                                .num(values[1])
+                                .name(values[2])
+                                .height(StringConverters.getInstance().strPositiveValToDoubleParser(values[3]).orElse(0.0))
+                                .weight(StringConverters.getInstance().strPositiveValToDoubleParser(values[4]).orElse(0.0))
+                                .build()
+                    )
                     .collect(Collectors.toList()));
         } catch (IOException e) {
             Utils.print("Error al leer el archivo CSV");

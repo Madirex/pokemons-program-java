@@ -6,10 +6,10 @@ import com.madiben.utils.StringConverters;
 import com.madiben.utils.Utils;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,24 +21,55 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     private final DatabaseManager database;
 
     /**
-     * [Método deshabilitado]
+     * Devuelve todos los elementos del repositorio
      *
-     * @return Optional de la lista de elementos encontrados
+     * @return Optional de la lista de elementos
      */
     @Override
-    public Optional<List<PokemonDataDTO>> findAll() {
-        return Optional.empty();
+    public List<PokemonDataDTO> findAll() throws SQLException {
+        List<PokemonDataDTO> list = new ArrayList<>();
+        var sql = "SELECT * FROM pokemon";
+        var res = database.select(sql).orElseThrow();
+        while (res.next()) {
+            // Creamos el objeto
+            list.add(PokemonDataDTO.builder()
+                    .id(res.getLong("id"))
+                    .num(res.getString("num"))
+                    .name(res.getString("name"))
+                    .height(StringConverters.getInstance()
+                            .strPositiveValToDoubleParser(res.getString("height")).orElse(0.0))
+                    .weight(StringConverters.getInstance()
+                            .strPositiveValToDoubleParser(res.getString("weight")).orElse(0.0))
+                    .build());
+        }
+        database.close();
+        return list;
     }
 
     /**
-     * [Método deshabilitado]
+     * Busca un elemento en el repositorio por su id
      *
      * @param integer Id del elemento a buscar
      * @return Optional del elemento encontrado
      */
     @Override
-    public Optional<PokemonDataDTO> findById(Integer integer) {
-        return Optional.empty();
+    public Optional<PokemonDataDTO> findById(Integer integer) throws SQLException {
+        Optional<PokemonDataDTO> optReturn = Optional.empty();
+        var sql = "SELECT * FROM pokemon WHERE id = ?";
+        var res = database.select(sql, integer).orElseThrow();
+        if (res.next()) {
+            optReturn = Optional.of(PokemonDataDTO.builder()
+                    .id(res.getLong("id"))
+                    .num(res.getString("num"))
+                    .name(res.getString("name"))
+                    .height(StringConverters.getInstance()
+                            .strPositiveValToDoubleParser(res.getString("height")).orElse(0.0))
+                    .weight(StringConverters.getInstance()
+                            .strPositiveValToDoubleParser(res.getString("weight")).orElse(0.0))
+                    .build());
+        }
+        database.close();
+        return optReturn;
     }
 
     /**
@@ -49,24 +80,18 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      */
     @Override
     public Optional<PokemonDataDTO> save(PokemonDataDTO entity) throws SQLException {
+        long id = 0;
         Optional<PokemonDataDTO> objReturn = Optional.empty();
         var sql = "INSERT INTO pokemon (num, name, height, weight) VALUES (?, ?, ?, ?)";
         database.open();
-        PreparedStatement res = database.insertNumericKey(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
-                .orElseThrow(() -> new SQLException("Error al insertar el Pokémon"));
-        objReturn = Optional.of(entity);
-            int n = res.executeUpdate();
-            if (n > 0){
-                ResultSet rs = res.getGeneratedKeys();
-                while (rs.next()){
-                    objReturn.get().setId(rs.getInt(1));
-                }
-                rs.close();
-                database.close();
-            }else{
-                throw new SQLException("Error al insertar el Pokémon");
-            }
-        return objReturn;
+        var res = database.insertAndGetKey(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
+                .orElseThrow();
+        if (res.next()) {
+            id = res.getLong(1);
+        }
+        database.close();
+        entity.setId(id);
+        return Optional.of(entity);
     }
 
     /**
@@ -96,31 +121,13 @@ public class PokemonRepositoryImpl implements PokemonRepository {
      * Busca un elemento en el repositorio por su nombre
      *
      * @param name Nombre del elemento a buscar
-     * @return Optional del elemento encontrado
+     * @return Lista de elementos encontrados
      */
     @Override
-    public Optional<PokemonDataDTO> findByName(String name) throws SQLException {
-        try {
-            var sql = "SELECT * FROM pokemon WHERE name LIKE ?";
-            database.open();
-            var res = database.select(sql, name);
-            if (res.isPresent() && res.get().first()) {
-                return Optional.of(PokemonDataDTO.builder()
-                        .id(res.get().getInt("id"))
-                        .num(res.get().getString("num"))
-                        .name(res.get().getString("name"))
-                        .height(StringConverters.getInstance()
-                                .strPositiveValToDoubleParser(res.get().getString("height")).orElse(0.0))
-                        .weight(StringConverters.getInstance()
-                                .strPositiveValToDoubleParser(res.get().getString("weight")).orElse(0.0))
-                        .build());
-            }
-        } catch (SQLException e) {
-            Utils.print("Error base de datos al buscar el Pokémon");
-        } finally {
-            database.close();
-        }
-        return Optional.empty();
+    public List<PokemonDataDTO> findByName(String name) throws SQLException {
+        return findAll().stream()
+                .filter(p -> p.getName().toLowerCase().contains(name.toLowerCase()))
+                .toList();
     }
 
     /**

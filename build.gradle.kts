@@ -17,6 +17,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.opencsv:opencsv:5.8")
+    implementation("org.mybatis:mybatis:3.5.13")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

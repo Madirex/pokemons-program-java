@@ -51,10 +51,10 @@ public class PokemonProgram {
     }
 
     private void printPokemonDataFromDatabase(String pokemonName) {
-        Optional<PokemonDataDTO> pikachu = PokemonController.getInstance().getPokemonDatabaseByName(pokemonName);
-        if (pikachu.isPresent()) {
+        List<PokemonDataDTO> pikachu = PokemonController.getInstance().getPokemonDatabaseByName(pokemonName);
+        if (!pikachu.isEmpty()) {
             Utils.print(Utils.SEPARATOR + "\nInformación de " + pokemonName + " desde la base de datos:");
-            Utils.print(pikachu.get().toString());
+            Utils.print(pikachu.get(0).toString());
         }else{
             Utils.print(pokemonName +" no se encuentra en la base de datos");
         }
