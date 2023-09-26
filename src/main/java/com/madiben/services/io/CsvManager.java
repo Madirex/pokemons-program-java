@@ -1,10 +1,10 @@
-package com.madiben.io;
+package com.madiben.services.io;
 
 import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.Pokemon;
-import com.madiben.utils.StringConverters;
-import com.madiben.utils.Utils;
+import com.madiben.services.utils.StringConverters;
+import com.madiben.services.utils.Utils;
 import com.opencsv.CSVWriter;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.madiben.utils;
+package com.madiben.services.utils;
 
 /**
  * Clase Utils que contiene métodos de utilidad

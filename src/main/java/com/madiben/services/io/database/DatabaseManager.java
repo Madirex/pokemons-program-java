@@ -1,6 +1,6 @@
-package com.madiben.database;
+package com.madiben.services.io.database;
 
-import com.madiben.utils.ApplicationProperties;
+import com.madiben.services.utils.ApplicationProperties;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.NonNull;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -79,7 +79,7 @@ public class DatabaseManager {
         try {
             initData();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //TODO: Define and throw a dedicated exception instead of using a generic one.
         }
     }
 
@@ -91,8 +91,8 @@ public class DatabaseManager {
         if (!dataInitialized && initScript.equalsIgnoreCase("true")) {
             String sql = new String(Objects.requireNonNull(getClass().getClassLoader()
                     .getResourceAsStream("data.sql")).readAllBytes(), StandardCharsets.UTF_8);
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.execute();
+            try (PreparedStatement psTry = connection.prepareStatement(sql)) {
+                psTry.execute();
             }
             dataInitialized = true;
         }
@@ -101,14 +101,13 @@ public class DatabaseManager {
     /**
      * Cierra la conexión con el servidor de base de datos
      *
-     * @throws SQLException Servidor no responde o no puede realizar la operación de cierre
      */
     public void close() {
         try {
             preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //TODO: Define and throw a dedicated exception instead of using a generic one.
         }
     }
 
@@ -123,7 +122,8 @@ public class DatabaseManager {
      */
     private ResultSet executeQuery(@NonNull String querySQL, Object... params) throws SQLException {
         this.open();
-        logger.debug("Ejecutando consulta: " + querySQL + " con parámetros: " + Arrays.toString(params));
+        var strParams = Arrays.toString(params);
+        logger.debug("Ejecutando consulta: " + querySQL + " con parámetros: " + strParams); //TODO: Format specifiers should be used instead of string concatenation.
         preparedStatement = connection.prepareStatement(querySQL);
         for (int i = 0; i < params.length; i++) {
             preparedStatement.setObject(i + 1, params[i]);
@@ -172,8 +172,10 @@ public class DatabaseManager {
      */
     public Optional<ResultSet> insertAndGetKey(@NonNull String insertSQL, Object... params) throws SQLException {
         this.open();
-        logger.debug("Ejecutando consulta " + insertSQL + " con parámetros: " + Arrays.toString(params));
-        preparedStatement = connection.prepareStatement(insertSQL, preparedStatement.RETURN_GENERATED_KEYS);
+        var strParams = Arrays.toString(params);
+        logger.debug("Ejecutando consulta " + insertSQL + " con parámetros: " + strParams); //TODO: Format specifiers should be used instead of string concatenation.
+        preparedStatement = connection.prepareStatement(insertSQL, preparedStatement.RETURN_GENERATED_KEYS); //TODO: String, which is used in SQL, can be unsafe
+        //TODO: Change this instance-reference to a static reference.
         for (int i = 0; i < params.length; i++) {
             preparedStatement.setObject(i + 1, params[i]);
         }
@@ -231,7 +233,8 @@ public class DatabaseManager {
      */
     private int updateQuery(@NonNull String genericSQL, Object... params) throws SQLException {
         this.open();
-        logger.debug("Ejecutando consulta " + genericSQL + " con parámetros: " + Arrays.toString(params));
+        var strParams = Arrays.toString(params);
+        logger.debug("Ejecutando consulta " + genericSQL + " con parámetros: " + strParams); //TODO: Format specifiers should be used instead of string concatenation.
         preparedStatement = connection.prepareStatement(genericSQL);
         for (int i = 0; i < params.length; i++) {
             preparedStatement.setObject(i + 1, params[i]);
@@ -290,15 +293,10 @@ public class DatabaseManager {
      * @throws SQLException          No se ha podido realizar la operación
      */
     public void initData(@NonNull String sqlFile, boolean logWriter) throws FileNotFoundException, SQLException {
-        logger.debug("Inicializando datos de fichero: " + sqlFile + " con logWriter: " + logWriter);
+        logger.debug("Inicializando datos de fichero: " + sqlFile + " con logWriter: " + logWriter); //TODO: Format specifiers should be used instead of string concatenation.
         this.open();
         var sr = new ScriptRunner(connection);
         var reader = new BufferedReader(new FileReader(sqlFile));
-        if (logWriter) {
-            sr.setLogWriter(new PrintWriter(System.out));
-        } else {
-            sr.setLogWriter(null);
-        }
         sr.runScript(reader);
     }
 }

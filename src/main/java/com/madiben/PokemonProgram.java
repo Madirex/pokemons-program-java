@@ -2,10 +2,10 @@ package com.madiben;
 
 import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
-import com.madiben.io.CsvManager;
+import com.madiben.services.io.CsvManager;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokemon;
-import com.madiben.utils.Utils;
+import com.madiben.services.utils.Utils;
 
 import java.io.File;
 import java.util.*;
@@ -50,6 +50,11 @@ public class PokemonProgram {
         printPokemonDataFromDatabase("Pikachu");
     }
 
+    /**
+     * Imprime los datos de un Pokémon dado su nombre haciendo una consulta a la base de datos
+     *
+     * @param pokemonName Nombre del Pokémon
+     */
     private void printPokemonDataFromDatabase(String pokemonName) {
         List<PokemonDataDTO> pikachu = PokemonController.getInstance().getPokemonDatabaseByName(pokemonName);
         if (!pikachu.isEmpty()) {
@@ -60,6 +65,11 @@ public class PokemonProgram {
         }
     }
 
+    /**
+     * Introduce los datos de los Pokémon en la base de datos y los imprime
+     *
+     * @param data Datos de los Pokémon
+     */
     private void pokemonDataToDatabaseAndPrintPokemonsData(Optional<List<PokemonDataDTO>> data) {
         if (data.isPresent()){
             PokemonController.getInstance().insertAllPokemonDataToDatabase(data.get());
@@ -69,10 +79,19 @@ public class PokemonProgram {
         }
     }
 
+    /**
+     * Exporta los datos de los Pokémon a un CSV
+     */
     private void csvExportData() {
         CsvManager.getInstance().exportPokemonDataToCSV();
     }
 
+    /**
+     * Lee los datos de un CSV y los imprime
+     *
+     * @param path Ruta del CSV
+     * @return Optional con los datos de los Pokémon
+     */
     private Optional<List<PokemonDataDTO>> readFileGetPokemonDataDTOAndPrint(String path) {
         Optional<List<PokemonDataDTO>> pokemons = CsvManager.getInstance().fileToPokemonDataDTO(path);
         if (pokemons.isPresent()) {
@@ -83,6 +102,9 @@ public class PokemonProgram {
         return pokemons;
     }
 
+    /**
+     * Imprime los datos del programa
+     */
     private void printConsoleData() {
         PokemonController pc = PokemonController.getInstance();
         Utils.print(Utils.SEPARATOR + "(1) Nombre los 10 primeros Pokémon:\n" + pc.getFirstPokemonNames(10));
@@ -105,7 +127,7 @@ public class PokemonProgram {
         Utils.print(Utils.SEPARATOR + "(16) Media de evoluciones de los Pokémon:\n" + String.format("%.2f", pc.getPokemonEvolutionAvg()));
         Utils.print(Utils.SEPARATOR + "(17) Media de debilidades de los Pokémon:\n" + String.format("%.2f", pc.getPokemonWeaknessesAvg()));
         printMap(pc.groupPokemonByType(), Utils.SEPARATOR + "(18) Pokémon agrupados por tipo:\n", "Tipo");
-        printMapLong(pc.groupPokemonByWeaknesses(), Utils.SEPARATOR + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
+        printMapLong(pc.numberOfPokemonGroupedByWeaknesses(), Utils.SEPARATOR + "(19) Número de Pokémon agrupados por debilidad:\n", "Debilidad");
         printMap(pc.groupPokemonByEvolutionNumber(), Utils.SEPARATOR + "(20) Pokémon agrupados por número de evoluciones:\n", "Número evoluciones");
         Utils.print(Utils.SEPARATOR + "(21) Debilidad más común:\n" + (pc.getMostCommonWeakness()));
 
