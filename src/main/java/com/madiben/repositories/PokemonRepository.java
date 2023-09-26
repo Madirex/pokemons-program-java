@@ -5,6 +5,10 @@ import com.madiben.dto.PokemonDataDTO;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Interfaz que define las operaciones CRUD de PokemonRepository
+ *
+ */
 public interface PokemonRepository extends CRUDRepository<PokemonDataDTO, Integer> {
     /**
      * Busca un elemento en el repositorio por su nombre
@@ -13,9 +17,4 @@ public interface PokemonRepository extends CRUDRepository<PokemonDataDTO, Intege
      * @return Lista de elementos encontrados
      */
     List<PokemonDataDTO> findByName(String name) throws SQLException;
-
-    /**
-     * Select que imprime los datos de la base de datos
-     */
-    void select() throws SQLException;
 }

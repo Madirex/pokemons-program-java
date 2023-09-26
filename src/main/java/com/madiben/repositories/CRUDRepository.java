@@ -1,7 +1,5 @@
 package com.madiben.repositories;
 
-import com.madiben.dto.PokemonDataDTO;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +8,9 @@ import java.util.Optional;
  * Interfaz que define las operaciones CRUD sobre un repositorio
  *
  * @param <T>  Tipo de la entidad
- * @param <ID> Tipo del ID de la entidad
+ * @param <I> Tipo del ID de la entidad
  */
-public interface CRUDRepository<T, ID> {
+public interface CRUDRepository<T, I> {
     /**
      * Devuelve todos los elementos del repositorio
      *
@@ -26,7 +24,7 @@ public interface CRUDRepository<T, ID> {
      * @param id Id del elemento a buscar
      * @return Optional del elemento encontrado
      */
-    Optional<T> findById(ID id) throws SQLException;
+    Optional<T> findById(I id) throws SQLException;
 
     /**
      * Guarda un elemento en el repositorio
@@ -43,7 +41,7 @@ public interface CRUDRepository<T, ID> {
      * @param entity Elemento con los nuevos datos
      * @return Optional del elemento actualizado
      */
-    Optional<T> update(ID id, T entity) throws SQLException;
+    Optional<T> update(I id, T entity) throws SQLException;
 
     /**
      * Borra un elemento del repositorio
@@ -51,5 +49,5 @@ public interface CRUDRepository<T, ID> {
      * @param id Id del elemento a borrar
      * @return Optional del elemento borrado
      */
-    Optional<T> delete(ID id) throws SQLException;
+    Optional<T> delete(I id) throws SQLException;
 }

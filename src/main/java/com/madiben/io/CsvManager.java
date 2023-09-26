@@ -1,8 +1,8 @@
 package com.madiben.io;
 
+import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.Pokemon;
-import com.madiben.controller.PokemonController;
 import com.madiben.utils.StringConverters;
 import com.madiben.utils.Utils;
 import com.opencsv.CSVWriter;
@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Clase CsvManager que administra la exportación e importación de datos CSV
@@ -23,7 +22,7 @@ public class CsvManager {
     private static CsvManager csvManagerInstance;
 
     /**
-     * Constructor privado para evitar instanciación
+     * Constructor privado para evitar la creación de instancia
      * SINGLETON
      */
     private CsvManager() {
@@ -58,7 +57,7 @@ public class CsvManager {
                                 .weight(StringConverters.getInstance().strPositiveValToDoubleParser(values[4]).orElse(0.0))
                                 .build()
                     )
-                    .collect(Collectors.toList()));
+                    .toList());
         } catch (IOException e) {
             Utils.print("Error al leer el archivo CSV");
         }

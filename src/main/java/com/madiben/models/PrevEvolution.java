@@ -1,17 +1,12 @@
 package com.madiben.models;
 
-import lombok.Data;
+import lombok.ToString;
 
-//@Data
+/**
+ * Clase PrevEvolution que representa la evolución previa de un Pokémon
+ */
+@ToString
 public class PrevEvolution {
     private String num;
     private String name;
-
-    @Override
-    public String toString() {
-        return "PrevEvolution{" +
-                "num='" + num + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

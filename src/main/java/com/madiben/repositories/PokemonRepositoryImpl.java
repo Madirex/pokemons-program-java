@@ -3,11 +3,8 @@ package com.madiben.repositories;
 import com.madiben.database.DatabaseManager;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.utils.StringConverters;
-import com.madiben.utils.Utils;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,6 @@ public class PokemonRepositoryImpl implements PokemonRepository {
         var sql = "SELECT * FROM pokemon";
         var res = database.select(sql).orElseThrow();
         while (res.next()) {
-            // Creamos el objeto
             list.add(PokemonDataDTO.builder()
                     .id(res.getLong("id"))
                     .num(res.getString("num"))
@@ -81,7 +77,6 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     @Override
     public Optional<PokemonDataDTO> save(PokemonDataDTO entity) throws SQLException {
         long id = 0;
-        Optional<PokemonDataDTO> objReturn = Optional.empty();
         var sql = "INSERT INTO pokemon (num, name, height, weight) VALUES (?, ?, ?, ?)";
         database.open();
         var res = database.insertAndGetKey(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
@@ -130,34 +125,5 @@ public class PokemonRepositoryImpl implements PokemonRepository {
                 .toList();
     }
 
-    /**
-     * Select que imprime TODOS los datos de la base de datos
-     */
-    @Override
-    public void select() throws SQLException {
-        var sql = "SELECT *";
-
-        database.open();
-        ResultSet rs = database.select(sql).orElseThrow(() -> new SQLException("Error al ejecutar el SELECT"));
-
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnCount = metaData.getColumnCount();
-
-        // Imprimir nombre columnas
-        for (int i = 1; i <= columnCount; i++) {
-            Utils.print(metaData.getColumnName(i) + "\t");
-        }
-
-        Utils.print("\n");
-
-        // Imprimir datos
-        while (rs.next()) {
-            for (int i = 1; i <= columnCount; i++) {
-                Utils.print(rs.getString(i) + "\t");
-            }
-            Utils.print("\n");
-        }
-        database.close();
-    }
 }
 

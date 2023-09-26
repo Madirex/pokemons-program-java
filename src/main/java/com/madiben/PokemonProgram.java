@@ -18,7 +18,7 @@ public class PokemonProgram {
     private static PokemonProgram pokemonProgramInstance;
 
     /**
-     * Constructor privado para evitar instanciación
+     * Constructor privado para evitar la creación de instancia
      */
     private PokemonProgram() {
     }
@@ -40,13 +40,13 @@ public class PokemonProgram {
      * Método inicializador del programa
      * 1. Imprime los datos del programa
      * 2. Exporta a CSV los datos del programa
-     * 3. Lee los datos del CSV y los printea. Introduce los datos del CSV en una base de datos y hace un select
+     * 3. Lee los datos del CSV y los imprime. Introduce los datos del CSV en una base de datos y hace un select
      * 4. Imprime los datos de Pikachu haciendo una consulta a la base de datos
      */
     public void init() {
         printConsoleData();
         csvExportData();
-        pokemonDataToDatabaseAndSelect(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
+        pokemonDataToDatabaseAndPrintPokemonsData(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
         printPokemonDataFromDatabase("Pikachu");
     }
 
@@ -60,10 +60,10 @@ public class PokemonProgram {
         }
     }
 
-    private void pokemonDataToDatabaseAndSelect(Optional<List<PokemonDataDTO>> data) {
+    private void pokemonDataToDatabaseAndPrintPokemonsData(Optional<List<PokemonDataDTO>> data) {
         if (data.isPresent()){
             PokemonController.getInstance().insertAllPokemonDataToDatabase(data.get());
-            PokemonController.getInstance().doDatabaseSelect();
+            PokemonController.getInstance().findAllPokemon().forEach(e -> Utils.print(e.toString()));
         }else{
             Utils.print("No se ha podido obtener los datos");
         }

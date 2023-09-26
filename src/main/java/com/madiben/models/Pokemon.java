@@ -6,6 +6,9 @@ import lombok.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Clase Pokemon que representa un Pokémon
+ */
 @Getter
 public class Pokemon {
     private int id;
@@ -53,6 +56,9 @@ public class Pokemon {
     @NonNull
     private ArrayList<PrevEvolution> prevEvolution;
 
+    /**
+     * Constructor de la clase Pokémon
+     */
     public Pokemon() {
         this.type = new ArrayList<>();
         this.multipliers = new ArrayList<>();
@@ -61,6 +67,11 @@ public class Pokemon {
         this.prevEvolution = new ArrayList<>();
     }
 
+    /**
+     * Devuelve los datos de un Pokémon separado con un salto de línea
+     *
+     * @return String de datos del Pokémon con salto de línea
+     */
     @Override
     public String toString() {
         return "\nPokemon{" +
@@ -83,6 +94,4 @@ public class Pokemon {
                 ", prev_evolution=" + prevEvolution +
                 '}';
     }
-
 }
-

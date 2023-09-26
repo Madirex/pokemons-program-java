@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+/**
+ * Clase controladora del Pokémon
+ */
 public class PokemonController {
     private static PokemonController instance;
 
@@ -32,15 +35,24 @@ public class PokemonController {
     private Pokedex pokedex;
     private PokemonRepositoryImpl pokemonRepository = new PokemonRepositoryImpl(DatabaseManager.getInstance());
 
+    /**
+     * Constructor privado para evitar la creación de la instancia
+     */
     private PokemonController() {
     }
 
+    /**
+     * Método singleton para obtener la instancia de la clase
+     *
+     * @return Instancia de la clase
+     */
     public static PokemonController getInstance() {
         if (instance == null) {
             instance = new PokemonController();
         }
         return instance;
     }
+
 
     public void insertAllPokemonDataToDatabase(List<PokemonDataDTO> pokemonDataDTOS) {
         AtomicBoolean failed = new AtomicBoolean(false);
@@ -58,9 +70,9 @@ public class PokemonController {
         }
     }
 
-    public void doDatabaseSelect(){
+    public List<PokemonDataDTO> findAllPokemon(){
         try {
-            pokemonRepository.select();
+            return pokemonRepository.findAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -207,38 +219,69 @@ public class PokemonController {
         return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().size() == q).count();
     }
 
+    /**
+     * Devuelve un Optional con la lista de Pokémon que coincida con la lista de debilidades pasada por parámetro
+     *
+     * @param weaknesses Lista de debilidades a filtrar
+     * @return Optional con la lista de Pokémon que coincida con la lista de debilidades pasada por parámetro
+     */
     public List<Pokemon> filterByWeaknessesAnyMatch(List<String> weaknesses) {
         return pokedex.getPokemon().stream().filter(pokemon -> weaknesses.stream()
                 .anyMatch(pokemon.getWeaknesses()::contains)).distinct().toList();
     }
 
-    public List<Pokemon> filterByWeaknessesContainsAll(List<String> weaknesses) {
-        return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getWeaknesses().containsAll(weaknesses)).toList();
-    }
-
+    /**
+     * Devuelve un Optional con la lista de Pokémon que tengan el tipo dado
+     *
+     * @param typeName Nombre del tipo a buscar
+     * @return Optional con la lista de nombres de los Pokémon que tengan el tipo dado
+     */
     public List<String> getNamesByTypeName(String typeName) {
         return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getType().contains(typeName))
                 .map(Pokemon::getName).toList();
     }
 
+    /**
+     * Devuelve un Optional con las evoluciones del Pokémon dado un nombre
+     *
+     * @param name Nombre del Pokémon a buscar
+     * @return Optional con la lista de evoluciones del Pokémon
+     */
     public Optional<ArrayList<NextEvolution>> getEvolutionsByPokemonName(String name) {
         return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().equalsIgnoreCase(name))
                 .map(Pokemon::getNextEvolution).findFirst();
     }
 
+    /**
+     * Devuelve un Optional con el Pokémon que tenga el nombre dado
+     *
+     * @param name Nombre del Pokémon a buscar
+     * @return Optional con el Pokémon encontrado
+     */
     public Optional<Pokemon> getPokemonByName(String name) {
         return pokedex.getPokemon().stream().filter(pokemon -> pokemon.getName().equalsIgnoreCase(name)).findFirst();
     }
 
+    /**
+     * Devuelve los nombres de los primeros q Pokémon
+     *
+     * @param q Cantidad de Pokémon a devolver
+     * @return Lista de nombres de los primeros q Pokémon
+     */
     public List<String> getFirstPokemonNames(long q) {
         return pokedex.getPokemon().stream().limit(q).map(Pokemon::getName).toList();
     }
 
+    /**
+     * Devuelve los nombres de los últimos q Pokémon
+     *
+     * @param q Cantidad de Pokémon a devolver
+     * @return Lista de nombres de los últimos q Pokémon
+     */
     public List<String> getLastPokemonNames(long q) {
         return pokedex.getPokemon().stream().skip(pokedex.getPokemon().size() - q)
                 .map(Pokemon::getName).toList();
     }
-
 
 }
 
