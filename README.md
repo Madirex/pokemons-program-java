@@ -46,13 +46,13 @@ Finalmente, se obtendrá la información de Pikachu.
 - **database.properties:** Este fichero es el que se deberá modificar si se quiere cambiar la URL, el driver, el nombre de la base de datos o si se quiere forzar el reinicio de la tabla Pokémon en el inicio del programa (eliminará y volverá a crear la tabla de Pokémon).
 
 ## ⚙ Tecnologías
-- Lombok
-- H2 Database
-- dotenv-kotlin
-- Gson
-- OpenCSV
-- MyBatis
-- Logback Classic
+- Lombok.
+- H2 Database.
+- dotenv-kotlin.
+- Gson.
+- OpenCSV.
+- MyBatis.
+- Logback Classic.
 
 ## Estructura
 - Controller: El controlador de Pokémon. Aquí se realizan las consultas API Stream de los Pokémon y también las consultas a la base de datos.
