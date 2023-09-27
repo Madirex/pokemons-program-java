@@ -46,6 +46,8 @@ Finalmente, se obtendrá la información de Pikachu.
 - **database.properties:** Este fichero es el que se deberá modificar si se quiere cambiar la URL, el driver, el nombre de la base de datos o si se quiere forzar el reinicio de la tabla Pokémon en el inicio del programa (eliminará y volverá a crear la tabla de Pokémon).
 
 ## ⚙ Tecnologías
+- Java 11.
+- Gradle.
 - Lombok.
 - H2 Database.
 - dotenv-kotlin.
