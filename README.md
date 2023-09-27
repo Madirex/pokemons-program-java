@@ -66,3 +66,7 @@ Finalmente, se obtendrá la información de Pikachu.
 - Utils: Clases de utilidad. StringConverters tiene los parsers necesarios para convertir datos de String a otros tipos de datos. LogGeneral es el logger general de la aplicación. Y ApplicationProperties la clase que se encarga de cargar los archivos de propiedades (en este programa, database.properties).
 - Main: Clase principal del programa.
 - PokemonProgram: La clase que se encarga de ejecutar el programa de Pokémon. Se le llama en el Main de la aplicación.
+
+## Autores
+- [Ángel (Madirex)](https://github.com/Madirex)
+- [Rubén (Rubenoide03)](https://github.com/Rubenoide03)
