@@ -31,3 +31,13 @@ C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
 7
 gradlew,5\b\5bbfa66edb4db3c7c33c5181f43510990d3307f9
+j
+:src/main/java/com/madiben/utils/ApplicationProperties.java,9\a\9ab36e7ee028d9ed70ffb6bac254b043692a6c74
+_
+/src/main/java/com/madiben/utils/LogGeneral.java,f\8\f8ea9572a8494dd1673ecc6b1908e2239355ab64
+e
+5src/main/java/com/madiben/utils/StringConverters.java,8\2\82b10b5993e4f5b28f045b721f444300db260961
+q
+Asrc/main/java/com/madiben/repositories/PokemonRepositoryImpl.java,0\d\0d1e24d63ef14aa111fee7471ab25afe1f9bc337
+p
+@src/main/java/com/madiben/services/database/DatabaseManager.java,0\e\0ee4c06ff8318c902a41d8bc2194359238338220
