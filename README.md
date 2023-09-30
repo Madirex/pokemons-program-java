@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://i.imgur.com/XUy2juK.png" alt="Imagen del proyecto Pokémons">
 </p>
+
 ## Descripción
 Programa desarrollado en Java con Gradle que simula una Pokédex con datos de Pokémon.
 El programa lee un fichero de datos de Pokémon de tipo JSON. Tras leerlo, se realizan consultas utilizando la API Stream obteniendo los siguientes datos:
