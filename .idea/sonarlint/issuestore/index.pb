@@ -38,5 +38,11 @@ k
 ;src/main/java/com/madiben/controller/PokemonController.java,8\7\8774648697fa93fb0e66d0cf0088ca0ac0852ac3
 ]
 -src/main/java/com/madiben/PokemonProgram.java,f\6\f696305181cb2b7429c951b8e9d24241945affa0
-g
-7src/main/java/com/madiben/database/DatabaseManager.java,e\3\e3f7ff9bc6b5a16f1d31dd4ad002c9842f99a4bf
+e
+5src/main/java/com/madiben/services/io/CsvManager.java,7\f\7f0765c8fcf9a354c18ce371f2fa56a3b4ff2f34
+<
+pokemons.iml,1\8\184ba957491afc7e5875147bafa22ba543e3f9e2
+X
+(gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
+A
+gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4

@@ -4,6 +4,7 @@ import com.madiben.controller.PokemonController;
 import com.madiben.dto.PokemonDataDTO;
 import com.madiben.models.NextEvolution;
 import com.madiben.models.Pokemon;
+import com.madiben.services.database.DatabaseManager;
 import com.madiben.services.io.CsvManager;
 import com.madiben.utils.LogGeneral;
 
@@ -48,6 +49,7 @@ public class PokemonProgram {
         csvExportData();
         pokemonDataToDatabaseAndPrintPokemonsData(readFileGetPokemonDataDTOAndPrint("out" + File.separator + "pokemon_data.csv"));
         printPokemonDataFromDatabase("Pikachu");
+        DatabaseManager.getInstance().close();
     }
 
     /**

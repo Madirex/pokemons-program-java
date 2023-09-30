@@ -25,6 +25,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     @Override
     public List<PokemonDataDTO> findAll() throws SQLException {
         List<PokemonDataDTO> list = new ArrayList<>();
+        database.beginTransaction();
         var sql = "SELECT * FROM pokemon";
         var res = database.select(sql).orElseThrow();
         while (res.next()) {
@@ -38,7 +39,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
                             .strPositiveValToDoubleParser(res.getString("weight")).orElse(0.0))
                     .build());
         }
-        database.close();
+        database.commit();
         return list;
     }
 
@@ -51,6 +52,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     @Override
     public Optional<PokemonDataDTO> findById(Integer integer) throws SQLException {
         Optional<PokemonDataDTO> optReturn = Optional.empty();
+        database.beginTransaction();
         var sql = "SELECT * FROM pokemon WHERE id = ?";
         var res = database.select(sql, integer).orElseThrow();
         if (res.next()) {
@@ -64,7 +66,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
                             .strPositiveValToDoubleParser(res.getString("weight")).orElse(0.0))
                     .build());
         }
-        database.close();
+        database.commit();
         return optReturn;
     }
 
@@ -78,13 +80,13 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     public Optional<PokemonDataDTO> save(PokemonDataDTO entity) throws SQLException {
         long id = 0;
         var sql = "INSERT INTO pokemon (num, name, height, weight) VALUES (?, ?, ?, ?)";
-        database.open();
+        database.beginTransaction();
         var res = database.insertAndGetKey(sql, entity.getNum(), entity.getName(), entity.getHeight(), entity.getWeight())
                 .orElseThrow();
         if (res.next()) {
             id = res.getLong(1);
         }
-        database.close();
+        database.commit();
         entity.setId(id);
         return Optional.of(entity);
     }
