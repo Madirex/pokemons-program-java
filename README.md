@@ -69,6 +69,11 @@ Finalmente, se obtendrá la información de Pikachu.
 - Main: Clase principal del programa.
 - PokemonProgram: La clase que se encarga de ejecutar el programa de Pokémon. Se le llama en el Main de la aplicación.
 
+## Ejecución
+<p align="center">
+  <img src="images/run.gif" alt="Programa funcionando">
+</p>
+
 ## Autores
 - [Ángel (Madirex)](https://github.com/Madirex)
 - [Rubén (Rubenoide03)](https://github.com/Rubenoide03)

@@ -46,3 +46,7 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 A
 gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
+_
+/src/main/java/com/madiben/utils/LogGeneral.java,f\8\f8ea9572a8494dd1673ecc6b1908e2239355ab64
+p
+@src/main/java/com/madiben/services/database/DatabaseManager.java,0\e\0ee4c06ff8318c902a41d8bc2194359238338220
