@@ -100,7 +100,6 @@ public class DatabaseManager {
 
     /**
      * Cierra la conexión con el servidor de base de datos
-     *
      */
     public void close() {
         try {
@@ -157,7 +156,8 @@ public class DatabaseManager {
      * @throws SQLException No se ha podido realizar la consulta o la tabla no existe o el desplazamiento
      *                      es mayor que el número de registros
      */
-    public Optional<ResultSet> select(@NonNull String querySQL, int limit, int offset, Object... params) throws SQLException {
+    public Optional<ResultSet> select(@NonNull String querySQL, int limit, int offset, Object... params)
+            throws SQLException {
         String query = querySQL + " LIMIT " + limit + " OFFSET " + offset;
         return Optional.of(executeQuery(query, params));
     }
@@ -262,7 +262,10 @@ public class DatabaseManager {
      *
      * @throws SQLException No se ha podido realizar la operación
      */
-    private void beginTransaction() throws SQLException {
+    public void beginTransaction() throws SQLException {
+        if (connection == null) {
+            this.open();
+        }
         connection.setAutoCommit(false);
     }
 
@@ -271,7 +274,7 @@ public class DatabaseManager {
      *
      * @throws SQLException No se ha podido realizar la operación
      */
-    private void commit() throws SQLException {
+    public void commit() throws SQLException {
         connection.commit();
         connection.setAutoCommit(true);
     }
