@@ -39,7 +39,7 @@ Una vez leídos los datos, estos serán exportados a un CSV de una base de datos
 Finalmente, se obtendrá la información de Pikachu.
 
 ## 💡 Instrucciones de uso
-- ⚠ **.env:** Este fichero se deberá de crear en la carpeta resources con los siguientes datos:
+- ⚠ **.env:** Este fichero se deberá de crear con los siguientes datos:
 
         DATABASE_USER=usuario
         DATABASE_PASSWORD=contraseña
